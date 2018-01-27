@@ -45,6 +45,7 @@ public class GameRunner : MonoBehaviour
 	private int PIPE_LAYER = 2;
 
 	private Pipe[][] pipes = new Pipe[(int)rows][];
+	private Tile[][] towers = new Tile[(int)rows][];
 
     // Use this for initialization
 	void Start () {
@@ -64,19 +65,32 @@ public class GameRunner : MonoBehaviour
 	}
 
 	void MakeWalls() {
-		Vector2 p1ReceiverLocation = new Vector2 (3, 3);
+		Vector2 p1ReceiverLocation = new Vector2 (2, 2);
 		Vector2 p2ReceiverLocation = new Vector2 (rows - 3, columns - 3);
+		Vector2 emmiter1Location = new Vector2 (rows - 3, 2);
+		Vector2 emmiter2Location = new Vector2 (2, columns - 3);
         for (var i = 0; i < rows; i++)
-        {
+		{
 			pipes [i] = new Pipe[(int)columns];
+			towers [i] = new Tile[(int)columns];
             for (var j = 0; j < columns; j++)
             {
                 int x = i;
-                int y = j;
+				int y = j;
 				MakeWall (Utilities.getLocationVector(x, y, WALL_LAYER),
 					new Vector3 (Utilities.tileSize, Utilities.tileSize, Utilities.thickness/2));
-				pipes [i][j] = new Pipe (Utilities.getLocationVector(x, y, PIPE_LAYER), Utilities.getRandomDropTile(), null);
-            }
+				if (x == p1ReceiverLocation.x && y == p1ReceiverLocation.y) {
+					towers [i] [j] = new Receiver (Utilities.getLocationVector (x, y, PIPE_LAYER), TILE_TYPE.PLAYER_ONE_GOAL, p1_receiver_mat);
+				} else if (x == p2ReceiverLocation.x && y == p2ReceiverLocation.y) {
+					towers [i] [j] = new Receiver (Utilities.getLocationVector (x, y, PIPE_LAYER), TILE_TYPE.PLAYER_TWO_GOAL, p2_receiver_mat);
+				} else if (x == emmiter1Location.x && y == emmiter1Location.y) {
+					towers [i] [j] = new FluidEmitter (Utilities.getLocationVector (x, y, PIPE_LAYER), TILE_TYPE.EMITTER, emitter_mat);
+				} else if (x == emmiter2Location.x && y == emmiter2Location.y) {
+					towers [i] [j] = new FluidEmitter (Utilities.getLocationVector(x, y, PIPE_LAYER), TILE_TYPE.EMITTER, emitter_mat);
+				} else {
+					pipes [i][j] = new Pipe (Utilities.getLocationVector(x, y, PIPE_LAYER), Utilities.getRandomDropTile(), null);
+				}
+			}
         }
     }
 

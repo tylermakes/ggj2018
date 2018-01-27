@@ -16,7 +16,6 @@ public class Tile
 		if (mat != null) {
 			cube.GetComponent<Renderer> ().material = mat;
 		}
-		cube.GetComponent<Renderer> ().material.color = new Color(200f, 100f, 0f);
 		cube.transform.position = location;
 		cube.transform.localScale = new Vector3 (Utilities.tileSize, Utilities.tileSize, Utilities.thickness/2);
 		coreObject = cube;
