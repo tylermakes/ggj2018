@@ -4,7 +4,7 @@ using System.Collections;
 public class Tile
 {
 	protected GameObject coreObject;
-	protected TILE_TYPE tileType;
+	public TILE_TYPE tileType;
 
 	public Tile (Vector3 location, TILE_TYPE m_tileType, Material mat) {
 		GameObject cube = GameObject.CreatePrimitive (PrimitiveType.Cube);

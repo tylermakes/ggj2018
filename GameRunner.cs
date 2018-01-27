@@ -43,9 +43,14 @@ public class GameRunner : MonoBehaviour
 	private PlayerUI p2UI;
 	private int WALL_LAYER = 1;
 	private int PIPE_LAYER = 2;
+    static private float emitSeconds = 1.0f;
+    private float emitSecondsElapsed = 0.0f;
+    static private float emissionMoveSpeed = 25.0f;
 
 	private Pipe[][] pipes = new Pipe[(int)rows][];
 	private Tile[][] towers = new Tile[(int)rows][];
+    private List<GameObject> emitters = new List<GameObject>();
+    private List<GameObject> emissions = new List<GameObject>();
 
     // Use this for initialization
 	void Start () {
@@ -57,11 +62,12 @@ public class GameRunner : MonoBehaviour
 		Utilities.angle_arrow_mat = angle_arrow_mat;
 		Utilities.opp_angle_arrow_mat = opp_angle_arrow_mat;
 		MakeWalls ();
+        // AddEmitter (Utilities.getLocationVector(0, 3, WALL_LAYER));
 		Vector2 limit = new Vector2 (rows, columns);
 		p1UI = new PlayerUI (new Vector2 (-Utilities.tileSize * 2, 0), Utilities.NEXT_TILES, p1_light_mat, p1_selector_mat); 
 		p2UI = new PlayerUI (new Vector2 (Utilities.tileSize * (columns + 1), Utilities.tileSize * (rows - 3)), Utilities.NEXT_TILES, p2_light_mat, p2_selector_mat); 
 		p1controller = new PlayerController (p1UI, p1_location, p1_selector_mat, limit);
-		p2controller = new PlayerController (p2UI, p2_location, p2_selector_mat, limit);
+        p2controller = new PlayerController (p2UI, p2_location, p2_selector_mat, limit);
 	}
 
 	void MakeWalls() {
@@ -91,6 +97,66 @@ public class GameRunner : MonoBehaviour
 					pipes [i][j] = new Pipe (Utilities.getLocationVector(x, y, PIPE_LAYER), Utilities.getRandomDropTile(), null);
 				}
 			}
+        }
+    }
+
+    void AddEmitter(Vector3 position) {
+        var cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
+        cube.gameObject.name = "Emitter";
+        cube.AddComponent<Rigidbody>();
+        cube.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
+        cube.transform.position = position;
+        cube.transform.localScale = new Vector3(Utilities.tileSize, Utilities.tileSize, Utilities.thickness * 50);
+        emitters.Add(cube);
+    }
+
+    void AddEmission(Vector3 position) {
+        var sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+        sphere.gameObject.name = "Emission";
+        sphere.AddComponent<Rigidbody>();
+        sphere.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
+        sphere.transform.position = position;
+        sphere.transform.localScale = new Vector3(Utilities.tileSize, Utilities.tileSize, Utilities.thickness * 50);
+        emissions.Add(sphere);
+    }
+
+    void Emit() {
+        foreach(var emitter in emitters) {
+            // Check if pipes are around the emitter. If so, add emission in that direction.
+            AddEmission(emitter.transform.position);
+        }
+    }
+
+    void MoveEmission(float deltaTime) {
+        foreach (var emission in emissions) {
+            var pos = emission.transform.position;
+
+            float moveDistance = deltaTime * emissionMoveSpeed;
+            Vector2 gridPos = Utilities.getGridLocation(pos);
+            TILE_TYPE t = Utilities.getGridType(gridPos, pipes);
+
+            switch (t) {
+                case TILE_TYPE.LEFT_ARROW:
+                case TILE_TYPE.LEFT_ELBOW_LEFT:
+                case TILE_TYPE.RIGHT_ELBOW_LEFT:
+                    emission.transform.position = new Vector3(pos.x - moveDistance, Utilities.getLocationVector(gridPos, 0).y, pos.z);
+                    break;
+                case TILE_TYPE.RIGHT_ARROW:
+                case TILE_TYPE.LEFT_ELBOW_RIGHT:
+                case TILE_TYPE.RIGHT_ELBOW_RIGHT:
+                    emission.transform.position = new Vector3(pos.x + moveDistance, Utilities.getLocationVector(gridPos, 0).y, pos.z);
+                    break;
+                case TILE_TYPE.UP_ARROW:
+                case TILE_TYPE.LEFT_ELBOW_UP:
+                case TILE_TYPE.RIGHT_ELBOW_UP:
+                    emission.transform.position = new Vector3(Utilities.getLocationVector(gridPos, 0).x, pos.y + moveDistance, pos.z);
+                    break;
+                case TILE_TYPE.DOWN_ARROW:
+                case TILE_TYPE.LEFT_ELBOW_DOWN:
+                case TILE_TYPE.RIGHT_ELBOW_DOWN:
+                    emission.transform.position = new Vector3(Utilities.getLocationVector(gridPos, 0).x, pos.y - moveDistance, pos.z);
+                    break;
+            }
         }
     }
 
@@ -158,6 +224,13 @@ public class GameRunner : MonoBehaviour
 //		Debug.unityLogger.Log("y==",Input.GetAxis (axisVName));
 		p1controller.update ();
 		p2controller.update ();
+
+        MoveEmission(Time.deltaTime);
+        emitSecondsElapsed += Time.deltaTime;
+        if (emitSecondsElapsed > emitSeconds) {
+            emitSecondsElapsed -= emitSeconds;
+            Emit();
+        }
     }
 
     void OnDestroy()
