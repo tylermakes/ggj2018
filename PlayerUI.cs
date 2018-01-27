@@ -5,7 +5,7 @@ using UnityEngine;
 public class PlayerUI {
 	
 	Vector2 location;
-//	private int UI_LAYER = 4;
+	private int UI_LAYER = 4;
 	private Pipe[] nextTiles;
 	private Material mat;
 	private Material light_mat;
@@ -24,7 +24,24 @@ public class PlayerUI {
 		location = m_location;
 		light_mat = m_light_mat;
 		mat = m_mat;
+		CreateOverlay (location, numDrops, light_mat, mat);
 		CreateNextDrops(location, numDrops);
+	}
+
+	private void CreateOverlay(Vector2 location, int numDrops, Material light_mat, Material mat) {
+		GameObject cube = GameObject.CreatePrimitive (PrimitiveType.Cube);
+		cube.AddComponent<Rigidbody> ();
+		cube.GetComponent<Rigidbody> ().constraints = RigidbodyConstraints.FreezeAll;
+		cube.GetComponent<Renderer> ().material = light_mat;
+		cube.transform.position = new Vector3 (location.x, location.y, 0);
+		cube.transform.localScale = new Vector3 (Utilities.tileSize, Utilities.tileSize, Utilities.thickness);
+
+		GameObject cube2 = GameObject.CreatePrimitive (PrimitiveType.Cube);
+		cube2.AddComponent<Rigidbody> ();
+		cube2.GetComponent<Rigidbody> ().constraints = RigidbodyConstraints.FreezeAll;
+		cube2.GetComponent<Renderer> ().material = mat;
+		cube2.transform.position = new Vector3 (location.x, location.y + Utilities.tileSize*1.5f, 0);
+		cube2.transform.localScale = new Vector3 (Utilities.tileSize, Utilities.tileSize*2, Utilities.thickness);
 	}
 
 	private void CreateNextDrops(Vector2 location, int numDrops) {

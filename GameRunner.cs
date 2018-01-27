@@ -29,7 +29,12 @@ public class GameRunner : MonoBehaviour
 	public Material p2_selector_mat;
 	public Material p1_light_mat;
 	public Material p2_light_mat;
-	public Shader arrowShader;
+	public Material arrow_mat;
+	public Material angle_arrow_mat;
+	public Material opp_angle_arrow_mat;
+	public Material emitter_mat;
+	public Material p1_receiver_mat;
+	public Material p2_receiver_mat;
 	public Vector2 p1_location = new Vector2 (0, 0);
 	public Vector2 p2_location = new Vector2 (0, 0);
 	private PlayerController p1controller;
@@ -39,7 +44,6 @@ public class GameRunner : MonoBehaviour
 	private int WALL_LAYER = 1;
 	private int PIPE_LAYER = 2;
 
-
 	private Pipe[][] pipes = new Pipe[(int)rows][];
 
     // Use this for initialization
@@ -48,15 +52,20 @@ public class GameRunner : MonoBehaviour
 		Utilities.p1_light_mat = p1_light_mat;
 		Utilities.p2_selector_mat = p2_selector_mat;
 		Utilities.p2_light_mat = p2_light_mat;
-		Utilities.arrowShader = arrowShader;
+		Utilities.arrow_mat = arrow_mat;
+		Utilities.angle_arrow_mat = angle_arrow_mat;
+		Utilities.opp_angle_arrow_mat = opp_angle_arrow_mat;
 		MakeWalls ();
+		Vector2 limit = new Vector2 (rows, columns);
 		p1UI = new PlayerUI (new Vector2 (-Utilities.tileSize * 2, 0), Utilities.NEXT_TILES, p1_light_mat, p1_selector_mat); 
 		p2UI = new PlayerUI (new Vector2 (Utilities.tileSize * (columns + 1), Utilities.tileSize * (rows - 3)), Utilities.NEXT_TILES, p2_light_mat, p2_selector_mat); 
-		p1controller = new PlayerController (p1UI, p1_location, p1_selector_mat);
-		p2controller = new PlayerController (p2UI, p2_location, p2_selector_mat);
+		p1controller = new PlayerController (p1UI, p1_location, p1_selector_mat, limit);
+		p2controller = new PlayerController (p2UI, p2_location, p2_selector_mat, limit);
 	}
 
-    void MakeWalls() {
+	void MakeWalls() {
+		Vector2 p1ReceiverLocation = new Vector2 (3, 3);
+		Vector2 p2ReceiverLocation = new Vector2 (rows - 3, columns - 3);
         for (var i = 0; i < rows; i++)
         {
 			pipes [i] = new Pipe[(int)columns];
@@ -121,6 +130,14 @@ public class GameRunner : MonoBehaviour
 		}
 		if (Input.GetAxis (axisHName) > distance) {
 			p1controller.triggerRight ();
+		}
+		if (Input.GetKey(KeyCode.Joystick1Button1)) {
+			DropData dropData2 = p1controller.triggerDrop ();
+			if (dropData2 == null) {
+				// not dropping
+			} else {
+				pipes [(int)dropData2.location.x] [(int)dropData2.location.y].setTileType (dropData2.tileType);
+			}
 		}
 
 //		Debug.unityLogger.Log("==",Input.GetAxis (axisHName));
