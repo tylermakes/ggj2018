@@ -29,7 +29,11 @@ public class Utilities
 
     public static TILE_TYPE getGridType(Vector2 location, Pipe[][] pipes) {
         Pipe pipe = pipes[(int)location.x][(int)location.y];
-        return pipe.tileType;
+		TILE_TYPE tileType = TILE_TYPE.CLEAR;
+		if (pipe != null) {
+			tileType = pipe.tileType;
+		}
+		return tileType;
     }
 
 	public static Vector3 getLocationVector(float x, float y, int layer) {
@@ -41,7 +45,7 @@ public class Utilities
 	}
 
 	public static TILE_TYPE getRandomDropTile() {
-		int rand = Random.Range (0, 11);
+		int rand = Random.Range (0, 12);
 		TILE_TYPE tileType = TILE_TYPE.CLEAR;
 		if (rand == 0) {
 			tileType = TILE_TYPE.UP_ARROW;

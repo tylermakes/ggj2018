@@ -32,6 +32,7 @@ public class Emission
 		TILE_TYPE t = Utilities.getGridType(gridPos, pipes);
 
 		switch (t) {
+		case TILE_TYPE.CLEAR:
 		case TILE_TYPE.LEFT_ARROW:
 		case TILE_TYPE.LEFT_ELBOW_LEFT:
 		case TILE_TYPE.RIGHT_ELBOW_LEFT:
