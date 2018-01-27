@@ -25,5 +25,9 @@ public class Tile
 	private void Clear() {
 		coreObject.GetComponent<Renderer>().material.shader = new Shader();
 	}
+
+	public Vector3 getLocation() {
+		return coreObject.transform.position;
+	}
 }
 
