@@ -21,6 +21,17 @@ public class Utilities
 	{
 	}
 
+    public static Vector2 getGridLocation(Vector3 position) {
+        float x = position.x / (tileSize + buffer);
+        float y = position.y / (tileSize + buffer);
+        return new Vector2(x, y);
+    }
+
+    public static TILE_TYPE getGridType(Vector2 location, Pipe[][] pipes) {
+        Pipe pipe = pipes[(int)location.x][(int)location.y];
+        return pipe.tileType;
+    }
+
 	public static Vector3 getLocationVector(float x, float y, int layer) {
 		return new Vector3 (x * (tileSize + buffer), y * (tileSize + buffer), thickness * -layer);
 	}
