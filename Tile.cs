@@ -14,7 +14,7 @@ public class Tile
 		cube.AddComponent<Rigidbody> ();
 		cube.GetComponent<Rigidbody> ().constraints = RigidbodyConstraints.FreezeAll;
 		if (mat != null) {
-			cube.GetComponent<Renderer> ().material = Utilities.p1_selector_mat;
+			cube.GetComponent<Renderer> ().material = mat;
 		}
 		cube.transform.position = location;
 		cube.transform.localScale = new Vector3 (Utilities.tileSize, Utilities.tileSize, Utilities.thickness/2);

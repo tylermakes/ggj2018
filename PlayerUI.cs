@@ -29,7 +29,11 @@ public class PlayerUI {
 
 	private void CreateNextDrops(Vector2 location, int numDrops) {
 		for (int i = 0; i < numDrops; i++) {
-			nextTiles[i] = new Pipe(location + new Vector2(0, i * Utilities.tileSize), Utilities.getRandomDropTile(), mat);
+			Material thisMat = mat;
+			if (i == 0) {
+				thisMat = light_mat;
+			}
+			nextTiles[i] = new Pipe(location + new Vector2(0, i * Utilities.tileSize), Utilities.getRandomDropTile(), thisMat);
 		}
 	}
 
