@@ -73,6 +73,7 @@ public class GameRunner : MonoBehaviour
 	private PlayerUI p2UI;
 	private PlayerUI p3UI;
 	private PlayerUI p4UI;
+    private GameUI gameUI;
 	private Pipe[][] pipes = new Pipe[(int)rows][];
 	private Tile[][] towers = new Tile[(int)rows][];
 	private List<Tile> playerTowers = new List<Tile>();
@@ -126,6 +127,7 @@ public class GameRunner : MonoBehaviour
 		MakeBackground ();
 		currentMap = DefineMap1 ();
         // AddEmitter (Utilities.getLocationVector(0, 3, WALL_LAYER));
+        gameUI = new GameUI();
 	}
 
 	PlayerController AddPlayer(int playerNum) {
@@ -468,6 +470,7 @@ public class GameRunner : MonoBehaviour
 //		Debug.unityLogger.Log("==",Input.GetAxis (axisHName));
 //		Debug.unityLogger.Log("y==",Input.GetAxis (axisVName));
 		if (gameState == GAME_STATES.PLAYING) {
+			gameUI.Update ();
 			updateEmitters ();
 			updateEmissions ();
 		}
