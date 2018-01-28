@@ -20,13 +20,14 @@ public class Emission
 
     public Emission (Vector3 start_position, Vector2 limit)
 	{
-		var sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-		sphere.gameObject.name = "Emission";
-		sphere.AddComponent<Rigidbody>();
-		sphere.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
-		sphere.transform.position = start_position;
-		sphere.transform.localScale = new Vector3(Utilities.tileSize, Utilities.tileSize, Utilities.thickness * 50);
-		coreObject = sphere;
+		var cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
+		cube.gameObject.name = "Emission";
+		cube.AddComponent<Rigidbody>();
+		cube.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
+		cube.GetComponent<Renderer> ().material = Utilities.text_packet_mat;
+		cube.transform.position = start_position;
+		cube.transform.localScale = new Vector3(Utilities.tileSize, Utilities.tileSize, Utilities.thickness);
+		coreObject = cube;
         this.limit = limit;
 	}
 

@@ -35,6 +35,7 @@ public class GameRunner : MonoBehaviour
 	public Material p2_light_mat;
 	public Material p3_light_mat;
 	public Material p4_light_mat;
+	public Material board_mat;
 	public Material arrow_mat;
 	public Material angle_arrow_mat;
 	public Material opp_angle_arrow_mat;
@@ -43,6 +44,7 @@ public class GameRunner : MonoBehaviour
 	public Material p2_receiver_mat;
 	public Material p3_receiver_mat;
 	public Material p4_receiver_mat;
+	public Material text_packet_mat;
 	public Vector2 p1_location = new Vector2 (0, 0);// set from game runner
 	public Vector2 p2_location = new Vector2 (0, 0);
 	public Vector2 p3_location = new Vector2 (0, 0);
@@ -77,6 +79,8 @@ public class GameRunner : MonoBehaviour
 		Utilities.arrow_mat = arrow_mat;
 		Utilities.angle_arrow_mat = angle_arrow_mat;
 		Utilities.opp_angle_arrow_mat = opp_angle_arrow_mat;
+		Utilities.text_packet_mat = text_packet_mat;
+		Utilities.board_mat = board_mat;
         limit = new Vector2(rows, columns);
 		MakeCustomWalls ();
         // AddEmitter (Utilities.getLocationVector(0, 3, WALL_LAYER));
@@ -138,53 +142,42 @@ public class GameRunner : MonoBehaviour
 		});
 	}
 
-//	if (x == p1ReceiverLocation.x && y == p1ReceiverLocation.y) {
-//		towers [i] [j] = new Receiver (Utilities.getLocationVector (x, y, PIPE_LAYER), TILE_TYPE.PLAYER_ONE_GOAL, p1_receiver_mat);
-//	} else if (x == p2ReceiverLocation.x && y == p2ReceiverLocation.y) {
-//		towers [i] [j] = new Receiver (Utilities.getLocationVector (x, y, PIPE_LAYER), TILE_TYPE.PLAYER_TWO_GOAL, p2_receiver_mat);
-//	} else if (x == emmiter1Location.x && y == emmiter1Location.y) {
-//		AddEmitter (x, y);
-//	} else if (x == emmiter2Location.x && y == emmiter2Location.y) {
-//		AddEmitter (x, y);
-//	} else {
-//		pipes [i][j] = new Pipe (Utilities.getLocationVector(x, y, PIPE_LAYER), Utilities.getRandomDropTile(), null);
+//	void MakeWalls() {
+//		Vector2 p1ReceiverLocation = new Vector2 (2, 2);
+//		Vector2 p2ReceiverLocation = new Vector2 (rows - 3, columns - 3);
+//		Vector2 p3ReceiverLocation = new Vector2 (rows - 3, columns - 3);
+//		Vector2 p4ReceiverLocation = new Vector2 (rows - 3, columns - 3);
+//		Vector2 emmiter1Location = new Vector2 (rows - 3, 2);
+//		Vector2 emmiter2Location = new Vector2 (2, columns - 3);
+//        for (var i = 0; i < rows; i++)
+//		{
+//			pipes [i] = new Pipe[(int)columns];
+//			towers [i] = new Tile[(int)columns];
+//            for (var j = 0; j < columns; j++)
+//            {
+//                int x = i;
+//				int y = j;
+//
+//				MakeWall (Utilities.getLocationVector(x, y, WALL_LAYER),
+//					new Vector3 (Utilities.tileSize, Utilities.tileSize, Utilities.thickness/2));
+//				if (x == p1ReceiverLocation.x && y == p1ReceiverLocation.y) {
+//					AddPlayerTower (x, y, TILE_TYPE.PLAYER_ONE_GOAL, p1_receiver_mat);
+//				} else if (x == p2ReceiverLocation.x && y == p2ReceiverLocation.y) {
+//					AddPlayerTower (x, y, TILE_TYPE.PLAYER_TWO_GOAL, p2_receiver_mat);
+//				} else if (x == p3ReceiverLocation.x && y == p3ReceiverLocation.y) {
+//					AddPlayerTower (x, y, TILE_TYPE.PLAYER_THREE_GOAL, p3_receiver_mat);
+//				} else if (x == p4ReceiverLocation.x && y == p4ReceiverLocation.y) {
+//					AddPlayerTower (x, y, TILE_TYPE.PLAYER_FOUR_GOAL, p4_receiver_mat);
+//				} else if (x == emmiter1Location.x && y == emmiter1Location.y) {
+//					AddEmitter (x, y);
+//				} else if (x == emmiter2Location.x && y == emmiter2Location.y) {
+//					AddEmitter (x, y);
+//				} else {
+//					AddPipe (x, y, (int)Utilities.getRandomDropTile());
+//				}
+//			}
+//        }
 //	}
-	void MakeWalls() {
-		Vector2 p1ReceiverLocation = new Vector2 (2, 2);
-		Vector2 p2ReceiverLocation = new Vector2 (rows - 3, columns - 3);
-		Vector2 p3ReceiverLocation = new Vector2 (rows - 3, columns - 3);
-		Vector2 p4ReceiverLocation = new Vector2 (rows - 3, columns - 3);
-		Vector2 emmiter1Location = new Vector2 (rows - 3, 2);
-		Vector2 emmiter2Location = new Vector2 (2, columns - 3);
-        for (var i = 0; i < rows; i++)
-		{
-			pipes [i] = new Pipe[(int)columns];
-			towers [i] = new Tile[(int)columns];
-            for (var j = 0; j < columns; j++)
-            {
-                int x = i;
-				int y = j;
-
-				MakeWall (Utilities.getLocationVector(x, y, WALL_LAYER),
-					new Vector3 (Utilities.tileSize, Utilities.tileSize, Utilities.thickness/2));
-				if (x == p1ReceiverLocation.x && y == p1ReceiverLocation.y) {
-					AddPlayerTower (x, y, TILE_TYPE.PLAYER_ONE_GOAL, p1_receiver_mat);
-				} else if (x == p2ReceiverLocation.x && y == p2ReceiverLocation.y) {
-					AddPlayerTower (x, y, TILE_TYPE.PLAYER_TWO_GOAL, p2_receiver_mat);
-				} else if (x == p3ReceiverLocation.x && y == p3ReceiverLocation.y) {
-					AddPlayerTower (x, y, TILE_TYPE.PLAYER_THREE_GOAL, p3_receiver_mat);
-				} else if (x == p4ReceiverLocation.x && y == p4ReceiverLocation.y) {
-					AddPlayerTower (x, y, TILE_TYPE.PLAYER_FOUR_GOAL, p4_receiver_mat);
-				} else if (x == emmiter1Location.x && y == emmiter1Location.y) {
-					AddEmitter (x, y);
-				} else if (x == emmiter2Location.x && y == emmiter2Location.y) {
-					AddEmitter (x, y);
-				} else {
-					AddPipe (x, y, (int)Utilities.getRandomDropTile());
-				}
-			}
-        }
-	}
 
 	void AddPlayerTower(int x, int y, TILE_TYPE tileType, Material mat) {
 		Tile tower = new Receiver (Utilities.getLocationVector (x, y, PIPE_LAYER), tileType, mat);
@@ -208,6 +201,7 @@ public class GameRunner : MonoBehaviour
 //        cube.AddComponent<BoxCollider> ();
         cube.AddComponent<Rigidbody> ();
         cube.GetComponent<Rigidbody> ().constraints = RigidbodyConstraints.FreezeAll;
+		cube.GetComponent<Renderer> ().material = board_mat;
         cube.transform.position = wallPosition;
         cube.transform.localScale = wallScale;
     }

@@ -5,7 +5,7 @@ using UnityEngine;
 public class PlayerUI {
 	
 	Vector2 location;
-	private int UI_LAYER = 4;
+//	private int UI_LAYER = 4;
 	private Pipe[] nextTiles;
 	private Material mat;
 	private Material light_mat;
@@ -35,7 +35,6 @@ public class PlayerUI {
 		scoreText = new GameObject();
 
 		scoreTextMesh = scoreText.AddComponent<TextMesh>();
-		MeshRenderer meshRenderer = scoreText.AddComponent<MeshRenderer>();
 		scoreText.transform.position = new Vector3 (location.x - Utilities.tileSize, location.y + Utilities.tileSize*3f, 0);
 		// do some settings here that are needed in the component
 		// set the text

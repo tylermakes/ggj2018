@@ -20,6 +20,8 @@ public class Utilities
 	public static Material p2_light_mat;
 	public static Material p3_light_mat;
 	public static Material p4_light_mat;
+	public static Material text_packet_mat;
+	public static Material board_mat;
 
 	public Utilities ()
 	{
