@@ -33,8 +33,8 @@ public enum GAME_STATES {
 [RequireComponent(typeof(AudioSource))]
 public class GameRunner : MonoBehaviour
 {
-    static private float rows = 10;
-	static private float columns = 10;
+	static private float rows = Utilities.rows;
+	static private float columns = Utilities.columns;
 	public Material p1_selector_mat;
 	public Material p2_selector_mat;
 	public Material p3_selector_mat;

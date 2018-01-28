@@ -8,6 +8,8 @@ public class Utilities
 	public static int PIPE_LAYER = 2;
 	public static int PLAYER_LAYER = 4;
 
+	public static float rows = 10;
+	public static float columns = 10;
 	public static float tileSize = 20f;
 	public static float levelSpace = 10f; // z pace
 	public static float buffer = 0f;
