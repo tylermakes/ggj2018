@@ -1,0 +1,13 @@
+{
+"companyName": "DefaultCompany",
+"productName": "Pipes2018",
+"dataUrl": "Packet Pirates.data.unityweb",
+"asmCodeUrl": "Packet Pirates.asm.code.unityweb",
+"asmMemoryUrl": "Packet Pirates.asm.memory.unityweb",
+"asmFrameworkUrl": "Packet Pirates.asm.framework.unityweb",
+"TOTAL_MEMORY": 268435456,
+"graphicsAPI": ["WebGL 2.0", "WebGL 1.0"],
+"webglContextAttributes": {"preserveDrawingBuffer": false},
+"splashScreenStyle": "Dark",
+"backgroundColor": "#231F20"
+}
