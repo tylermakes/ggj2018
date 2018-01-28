@@ -17,6 +17,7 @@ public class PlayerController {
 	private TILE_TYPE[] nextDropType = new TILE_TYPE[Utilities.NEXT_TILES];
 	private PlayerUI playerUI;
 	private Vector2 limit;
+	private int score = 0;
 
 	public PlayerController(PlayerUI ui, Vector2 startLocation, Material mat, Vector2 m_limit) {
 		GameObject cube = GameObject.CreatePrimitive (PrimitiveType.Cube);
@@ -88,7 +89,12 @@ public class PlayerController {
 		return dd;
 	}
 
+	public void triggerScore() {
+		score++;
+	}
+
 	public void update() {
+		playerUI.setScore (score);
 		upDelay.update();
 		downDelay.update();
 		leftDelay.update();

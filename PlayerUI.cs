@@ -9,6 +9,8 @@ public class PlayerUI {
 	private Pipe[] nextTiles;
 	private Material mat;
 	private Material light_mat;
+	private GameObject scoreText;
+	private TextMesh scoreTextMesh;
 
 	public PlayerUI(Vector2 m_location, int numDrops, Material m_light_mat, Material m_mat) {
 //		GameObject cube = GameObject.CreatePrimitive (PrimitiveType.Cube);
@@ -24,8 +26,31 @@ public class PlayerUI {
 		location = m_location;
 		light_mat = m_light_mat;
 		mat = m_mat;
+		CreateScore (location, numDrops);
 		CreateOverlay (location, numDrops, light_mat, mat);
 		CreateNextDrops(location, numDrops);
+	}
+
+	private void CreateScore(Vector2 location, int numDrops) {
+		scoreText = new GameObject();
+
+		scoreTextMesh = scoreText.AddComponent<TextMesh>();
+		MeshRenderer meshRenderer = scoreText.AddComponent<MeshRenderer>();
+		scoreText.transform.position = new Vector3 (location.x - Utilities.tileSize, location.y + Utilities.tileSize*3f, 0);
+		// do some settings here that are needed in the component
+		// set the text
+		scoreTextMesh.fontSize = 72;
+		scoreTextMesh.text = "Score:";
+//		GameObject txt = new GameObject ();
+//		txt.transform.SetParent(GameObject.Find( "UICanvas" ).transform);
+////		txt.transform.position = new Vector3 (location.x, location.y - Utilities.tileSize*4f, 0);
+//		scoreText = txt.AddComponent<Text> ();
+//		scoreText.font = Resources.GetBuiltinResource(typeof(Font), "Arial.ttf") as Font;
+//		scoreText.fontSize = 24;
+//		scoreText.transform.position = new Vector3 (location.x, location.y, 0);
+////		scoreText.text = "=============";
+//		scoreText.text = "THIS IS THE SCORE!" + location.x + "," + location.y;
+//		scoreText.text = "THIS IS THE SCORE!THIS IS THE SCORE!THIS IS THE SCORE!THIS IS THE SCORE!THIS IS THE SCORE!";
 	}
 
 	private void CreateOverlay(Vector2 location, int numDrops, Material light_mat, Material mat) {
@@ -58,5 +83,9 @@ public class PlayerUI {
 		for (int i = 0; i < nextTiles.Length; i++) {
 			nextTiles[i].setTileType(m_nextTiles[i]);
 		}
+	}
+
+	public void setScore(int score) {
+		scoreTextMesh.text = "Score: " + score;
 	}
 }

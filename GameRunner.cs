@@ -82,6 +82,8 @@ public class GameRunner : MonoBehaviour
         // AddEmitter (Utilities.getLocationVector(0, 3, WALL_LAYER));
 		p1UI = new PlayerUI (new Vector2 (-Utilities.tileSize * 2, 0), Utilities.NEXT_TILES, p1_light_mat, p1_selector_mat); 
 		p2UI = new PlayerUI (new Vector2 (Utilities.tileSize * (columns + 1), Utilities.tileSize * (rows - 3)), Utilities.NEXT_TILES, p2_light_mat, p2_selector_mat); 
+		p3UI = new PlayerUI (new Vector2 (Utilities.tileSize * (columns + 1), 0), Utilities.NEXT_TILES, p3_light_mat, p3_selector_mat); 
+		p4UI = new PlayerUI (new Vector2 (-Utilities.tileSize * 2, Utilities.tileSize * (rows - 3)), Utilities.NEXT_TILES, p4_light_mat, p4_selector_mat); 
 		p1controller = new PlayerController (p1UI, p1_location, p1_selector_mat, limit);
 		p2controller = new PlayerController (p2UI, p2_location, p2_selector_mat, limit);
 		p3controller = new PlayerController (p3UI, p3_location, p3_selector_mat, limit);
@@ -276,11 +278,6 @@ public class GameRunner : MonoBehaviour
 
 //		Debug.unityLogger.Log("==",Input.GetAxis (axisHName));
 //		Debug.unityLogger.Log("y==",Input.GetAxis (axisVName));
-		p1controller.update ();
-		p2controller.update ();
-		p3controller.update ();
-		p4controller.update ();
-
 
 		foreach(FluidEmitter emitter in emitters) {
 			// Check if pipes are around the emitter. If so, add emission in that direction.
@@ -307,11 +304,34 @@ public class GameRunner : MonoBehaviour
 //					Debug.unityLogger.Log ("==ET:", emissionGridLocation);
 					if (emissionGridLocation.x == aTLocation.x && emissionGridLocation.y == aTLocation.y) {
 						em.setWon ();
+						addScoreForPlayer(aT);
 					}
 				});
 			}
 		}
+
+		p1controller.update ();
+		p2controller.update ();
+		p3controller.update ();
+		p4controller.update ();
     }
+
+	void addScoreForPlayer(Tile tile) {
+		switch (tile.tileType) {
+		case TILE_TYPE.PLAYER_ONE_GOAL:
+			p1controller.triggerScore ();
+			break;
+		case TILE_TYPE.PLAYER_TWO_GOAL:
+			p2controller.triggerScore ();
+			break;
+		case TILE_TYPE.PLAYER_THREE_GOAL:
+			p3controller.triggerScore ();
+			break;
+		case TILE_TYPE.PLAYER_FOUR_GOAL:
+			p4controller.triggerScore ();
+			break;
+		}
+	}
 
     void OnDestroy()
     {
