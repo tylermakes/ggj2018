@@ -7,6 +7,7 @@ public class Utilities
 	public static int WALL_LAYER = 1;
 	public static int PIPE_LAYER = 2;
 	public static int PLAYER_LAYER = 4;
+    public static int GAME_UI_LAYER = - 50;
 
 	public static float rows = 10;
 	public static float columns = 10;
@@ -31,6 +32,7 @@ public class Utilities
 	public static Material text_packet2_mat;
 	public static Material text_packet3_mat;
 	public static Material board_mat;
+    public static Material overlay_mat;
 	public static bool isCreditMode = false;
 	public static AudioSource audioSource;
 	public static AudioClip collectedSound;

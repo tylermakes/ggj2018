@@ -60,6 +60,7 @@ public class GameRunner : MonoBehaviour
 	public Material text_packet_mat;
 	public Material text_packet2_mat;
 	public Material text_packet3_mat;
+    public Material overlay_mat;
 	public Vector2 p1_location = new Vector2 (0, 0);// set from game runner
 	public Vector2 p2_location = new Vector2 (0, 0);
 	public Vector2 p3_location = new Vector2 (0, 0);
@@ -96,6 +97,7 @@ public class GameRunner : MonoBehaviour
 	private bool keyboardPlayerAdded = false;
 	private PlayerController keyboardPlayerController;
 	private GAME_STATES gameState = GAME_STATES.START;
+    private float timeRemaining = 1.0f;
 
 	private GameMap currentMap;
 	private GameMap map1;
@@ -126,6 +128,7 @@ public class GameRunner : MonoBehaviour
 		Utilities.text_packet2_mat = text_packet2_mat;
 		Utilities.text_packet3_mat = text_packet3_mat;
 		Utilities.board_mat = board_mat;
+        Utilities.overlay_mat = overlay_mat;
 		limit = new Vector2(rows, columns);
 		quit = new HoldKey (KeyCode.Q, HOLD_KEY_TIME);
 		pause = new HoldKey (KeyCode.P, HOLD_KEY_TIME);
@@ -142,9 +145,7 @@ public class GameRunner : MonoBehaviour
 		map4 = DefineMap4 ();
 		currentMap = map1;
         // AddEmitter (Utilities.getLocationVector(0, 3, WALL_LAYER));
-        gameUI = new GameUI(() => {
-            gameState = GAME_STATES.END;
-        });
+        gameUI = new GameUI();
 	}
 
 	PlayerController AddPlayer(int playerNum) {
@@ -614,7 +615,7 @@ public class GameRunner : MonoBehaviour
 //		Debug.unityLogger.Log("==",Input.GetAxis (axisHName));
 //		Debug.unityLogger.Log("y==",Input.GetAxis (axisVName));
 		if (gameState == GAME_STATES.PLAYING) {
-			gameUI.Update ();
+            handleGameTime ();
 			updateEmitters ();
 			updateEmissions ();
 		}
@@ -687,5 +688,46 @@ public class GameRunner : MonoBehaviour
 
     void OnDestroy()
     {
+    }
+
+    void handleGameTime() {
+        timeRemaining -= Time.deltaTime;
+        gameUI.UpdateTime(timeRemaining);
+        if (timeRemaining <= 0)
+        {
+            handleGameOver();
+        }
+
+    }
+
+    void handleGameOver() {
+        // Game over
+        timeRemaining = 0.0f;
+        int winnerNum = 1;
+        int winnerScore = 0;
+
+        if (playerAdded1 && p1controller.getScore() > winnerScore)
+        {
+            winnerScore = p1controller.getScore();
+            winnerNum = 1;
+        }
+        if (playerAdded2 && p2controller.getScore() > winnerScore)
+        {
+            winnerScore = p2controller.getScore();
+            winnerNum = 2;
+        }
+        if (playerAdded3 && p3controller.getScore() > winnerScore)
+        {
+            winnerScore = p3controller.getScore();
+            winnerNum = 3;
+        }
+        if (playerAdded4 && p4controller.getScore() > winnerScore)
+        {
+            winnerScore = p4controller.getScore();
+            winnerNum = 4;
+        }
+
+        gameUI.DisplayEndOverlay(winnerNum, winnerScore);
+        gameState = GAME_STATES.END;
     }
 }

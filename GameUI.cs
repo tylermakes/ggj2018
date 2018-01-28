@@ -1,18 +1,17 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class GameUI {
     private GameObject timerText;
     private TextMesh timerTextMesh;
-    private Action gameEndAction;
 
-    private float timeRemaining = 60.0f;
+    private GameObject overlayText;
+    private TextMesh overlayTextMesh;
+    private GameObject overlay;
 
-    public GameUI(Action gameEndAction)
+    public GameUI()
     {
         Vector2 pos = new Vector2(-Utilities.tileSize * 3, Utilities.tileSize * 2);
         CreateTimer(pos);
-        this.gameEndAction = gameEndAction;
     }
 
     private void CreateTimer(Vector2 location)
@@ -25,15 +24,27 @@ public class GameUI {
         timerTextMesh.text = "60";
     }
 
-    public void Update() {
-        timeRemaining -= Time.deltaTime;
-        if (timeRemaining <= 0) {
-            // Game over
-            timeRemaining = 0.0f;
-            gameEndAction();
-            return;
-        }
-        timerTextMesh.text = timeRemaining.ToString("N0");
+    public void UpdateTime(float time) {
+       
+        timerTextMesh.text = time.ToString("N0");
+    }
+
+    public void DisplayEndOverlay(int winnerNumber, int winnerScore) {
+        var cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
+        cube.name = "Background";
+        cube.AddComponent<Rigidbody>();
+        cube.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
+        cube.GetComponent<Renderer>().material = Utilities.overlay_mat;
+        cube.transform.position = new Vector3(Utilities.tileSize * Utilities.columns / 2, Utilities.tileSize * Utilities.rows / 2, Utilities.GAME_UI_LAYER);
+        cube.transform.localScale = new Vector3(Utilities.tileSize * Utilities.columns * 2, Utilities.tileSize * Utilities.rows * 2, Utilities.thickness / 2);
+        overlay = cube;
+
+        overlayText = new GameObject();
+
+        overlayTextMesh = timerText.AddComponent<TextMesh>();
+        overlayText.transform.position = new Vector3(Utilities.tileSize * Utilities.columns / 2, Utilities.tileSize * Utilities.rows / 2, Utilities.GAME_UI_LAYER);
+        overlayTextMesh.fontSize = 72;
+        overlayTextMesh.text = "60";
     }
 
 	public void DestroyInternals() {

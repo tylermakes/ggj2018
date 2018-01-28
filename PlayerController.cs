@@ -110,4 +110,8 @@ public class PlayerController {
 		player_selector.DestroyInternals ();
 		player_selector = null;
 	}
+
+    public int getScore() {
+        return score;
+    }
 }
