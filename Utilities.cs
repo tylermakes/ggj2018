@@ -57,7 +57,7 @@ public class Utilities
     }
 
 	public static TILE_TYPE getRandomDropTile() {
-		int rand = Random.Range (0, 12);
+		int rand = Random.Range (0, 4);
 		TILE_TYPE tileType = TILE_TYPE.CLEAR;
 		if (rand == 0) {
 			tileType = TILE_TYPE.UP_ARROW;
