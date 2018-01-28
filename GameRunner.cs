@@ -107,6 +107,7 @@ public class GameRunner : MonoBehaviour
 	private int mapNum = 1;
 
 	private const int HOLD_KEY_TIME = 50;
+	private const int TOTAL_GAME_TIME = 30;
 
     // Use this for initialization
 	void Start () {
@@ -144,8 +145,8 @@ public class GameRunner : MonoBehaviour
 		map3 = DefineMap3 ();
 		map4 = DefineMap4 ();
 		currentMap = map1;
-        // AddEmitter (Utilities.getLocationVector(0, 3, WALL_LAYER));
         gameUI = new GameUI();
+		goToStartState ();
 	}
 
 	PlayerController AddPlayer(int playerNum) {
@@ -409,7 +410,7 @@ public class GameRunner : MonoBehaviour
 			playerController.triggerRight ();
 		}
 		if (Input.GetKey(joystickKeyCode)) {
-			if (gameState == GAME_STATES.START) {
+			if (gameState != GAME_STATES.START) {
 				DropData dropData = playerController.triggerDrop ();
 				if (dropData == null) {
 					// not dropping
@@ -487,7 +488,18 @@ public class GameRunner : MonoBehaviour
 		destroyAllEmitters ();
 		destroyPipesAndTowers ();
 		destroyPlayers ();
+		goToStartState ();
+	}
+
+	void goToStartState() {
 		gameState = GAME_STATES.START;
+		gameUI.DisplayStartOverlay ("PACKET PIRATES\nCurrent Map:" + mapNum + "\nPress Options Key to Add Controller.\nHold 'A' to add Keyboard.\nHold Num Key to Select Map.\nHold 'S' key to start.");
+	}
+
+	void updateStartText () {
+		if (gameState == GAME_STATES.START) {
+			gameUI.DisplayStartOverlay ("PACKET PIRATES\nCurrent Map:" + mapNum + "\nPress Options Key to Add Controller.\nHold 'A' to add Keyboard.\nHold Num Key to Select Map.\nHold 'S' key to start.");
+		}
 	}
 
 	void StartGame() {
@@ -535,6 +547,9 @@ public class GameRunner : MonoBehaviour
 		currentMap.pipeLocations.ForEach (t => {
 			AddPipe ((int)t.x, (int)t.y, (int)t.z);
 		});
+		timeRemaining = TOTAL_GAME_TIME;
+		gameUI.DestroyOverlay ();
+		gameUI.CreateTimer ();
 		gameState = GAME_STATES.PLAYING;
 	}
 
@@ -557,21 +572,25 @@ public class GameRunner : MonoBehaviour
 				Debug.unityLogger.Log("==Map1");
 				mapNum = 1;
 				currentMap = map1;
+				updateStartText ();
 			}
 			if (keyTwo.Update()) {
 				Debug.unityLogger.Log("==Map2");
 				mapNum = 2;
 				currentMap = map2;
+				updateStartText ();
 			}
 			if (keyThree.Update()) {
 				Debug.unityLogger.Log("==Map3");
 				mapNum = 3;
 				currentMap = map3;
+				updateStartText ();
 			}
 			if (keyFour.Update()) {
 				Debug.unityLogger.Log("==Map4");
 				mapNum = 4;
 				currentMap = map4;
+				updateStartText ();
 			}
 			if (start.Update ()) {
 				StartGame ();
@@ -711,7 +730,6 @@ public class GameRunner : MonoBehaviour
     void handleGameTime() {
         timeRemaining -= Time.deltaTime;
         gameUI.UpdateTime(timeRemaining);
-		Debug.unityLogger.Log ("==updating time?", gameState);
         if (timeRemaining <= 0)
         {
             handleGameOver();

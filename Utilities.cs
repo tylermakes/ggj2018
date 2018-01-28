@@ -7,7 +7,8 @@ public class Utilities
 	public static int WALL_LAYER = 1;
 	public static int PIPE_LAYER = 2;
 	public static int PLAYER_LAYER = 4;
-    public static int GAME_UI_LAYER = - 50;
+    public static int GAME_UI_LAYER = -50;
+	public static int GAME_UI_TEXT_LAYER = -100;
 
 	public static float rows = 10;
 	public static float columns = 10;
