@@ -85,6 +85,10 @@ public class GameRunner : MonoBehaviour
 	private HoldKey addKeyboard;
 	private HoldKey pause;
 	private HoldKey start;
+	private HoldKey keyOne;
+	private HoldKey keyTwo;
+	private HoldKey keyThree;
+	private HoldKey keyFour;
 	private bool playerAdded1 = false;
 	private bool playerAdded2 = false;
 	private bool playerAdded3 = false;
@@ -94,6 +98,11 @@ public class GameRunner : MonoBehaviour
 	private GAME_STATES gameState = GAME_STATES.START;
 
 	private GameMap currentMap;
+	private GameMap map1;
+	private GameMap map2;
+	private GameMap map3;
+	private GameMap map4;
+	private int mapNum = 1;
 
 	private const int HOLD_KEY_TIME = 100;
 
@@ -123,9 +132,17 @@ public class GameRunner : MonoBehaviour
 		quit = new HoldKey (KeyCode.Q, HOLD_KEY_TIME);
 		pause = new HoldKey (KeyCode.P, HOLD_KEY_TIME);
 		start = new HoldKey (KeyCode.S, HOLD_KEY_TIME);
+		keyOne = new HoldKey (KeyCode.Alpha1, HOLD_KEY_TIME);
+		keyTwo = new HoldKey (KeyCode.Alpha2, HOLD_KEY_TIME);
+		keyThree = new HoldKey (KeyCode.Alpha3, HOLD_KEY_TIME);
+		keyFour = new HoldKey (KeyCode.Alpha4, HOLD_KEY_TIME);
 		addKeyboard = new HoldKey (KeyCode.A, HOLD_KEY_TIME);
 		MakeBackground ();
-		currentMap = DefineMap1 ();
+		map1 = DefineMap1 ();
+		map2 = DefineMap2 ();
+		map3 = DefineMap3 ();
+		map4 = DefineMap4 ();
+		currentMap = map1;
         // AddEmitter (Utilities.getLocationVector(0, 3, WALL_LAYER));
         gameUI = new GameUI(() => {
             gameState = GAME_STATES.END;
@@ -219,6 +236,70 @@ public class GameRunner : MonoBehaviour
 	}
 
 	GameMap DefineMap1() {
+		List<Vector2> p1Towers = new List<Vector2>();
+		List<Vector2> p2Towers = new List<Vector2>();
+		List<Vector2> p3Towers = new List<Vector2>();
+		List<Vector2> p4Towers = new List<Vector2>();
+		List<Vector2> emitterLocations = new List<Vector2>();
+		List<Vector3> pipeLocations = new List<Vector3>();
+		p1Towers.Add (new Vector2 (1, 1));
+		p2Towers.Add (new Vector2 (rows - 2, columns - 2));
+		p3Towers.Add (new Vector2 (rows - 2, 1));
+		p4Towers.Add (new Vector2 (1, columns - 2));
+		emitterLocations.Add(new Vector2 (4, 5));
+		emitterLocations.Add(new Vector2 (6, 6));
+		return new GameMap (p1Towers, p2Towers, p3Towers, p4Towers, emitterLocations, pipeLocations);
+	}
+
+	GameMap DefineMap2() {
+		List<Vector2> p1Towers = new List<Vector2>();
+		List<Vector2> p2Towers = new List<Vector2>();
+		List<Vector2> p3Towers = new List<Vector2>();
+		List<Vector2> p4Towers = new List<Vector2>();
+		List<Vector2> emitterLocations = new List<Vector2>();
+		List<Vector3> pipeLocations = new List<Vector3>();
+		p1Towers.Add (new Vector2 (1, 1));
+		p2Towers.Add (new Vector2 (rows - 2, columns - 2));
+		p3Towers.Add (new Vector2 (rows - 2, 1));
+		p4Towers.Add (new Vector2 (1, columns - 2));
+		emitterLocations.Add(new Vector2 (4, 5));
+		emitterLocations.Add(new Vector2 (6, 6));
+		pipeLocations.Add(new Vector3 (6, 8, (float)TILE_TYPE.LEFT_ARROW));
+		pipeLocations.Add(new Vector3 (5, 8, (float)TILE_TYPE.DOWN_ARROW));
+		pipeLocations.Add(new Vector3 (5, 7, (float)TILE_TYPE.RIGHT_ARROW));
+		pipeLocations.Add(new Vector3 (6, 7, (float)TILE_TYPE.UP_ARROW));
+		pipeLocations.Add(new Vector3 (4, 8, (float)TILE_TYPE.LEFT_ARROW));
+		pipeLocations.Add(new Vector3 (2, 8, (float)TILE_TYPE.DOWN_ARROW));
+		pipeLocations.Add(new Vector3 (2, 6, (float)TILE_TYPE.RIGHT_ARROW));
+		pipeLocations.Add(new Vector3 (4, 6, (float)TILE_TYPE.UP_ARROW));
+		return new GameMap (p1Towers, p2Towers, p3Towers, p4Towers, emitterLocations, pipeLocations);
+	}
+
+	GameMap DefineMap3() {
+		List<Vector2> p1Towers = new List<Vector2>();
+		List<Vector2> p2Towers = new List<Vector2>();
+		List<Vector2> p3Towers = new List<Vector2>();
+		List<Vector2> p4Towers = new List<Vector2>();
+		List<Vector2> emitterLocations = new List<Vector2>();
+		List<Vector3> pipeLocations = new List<Vector3>();
+		p1Towers.Add (new Vector2 (1, 1));
+		p2Towers.Add (new Vector2 (rows - 2, columns - 2));
+		p3Towers.Add (new Vector2 (rows - 2, 1));
+		p4Towers.Add (new Vector2 (1, columns - 2));
+		emitterLocations.Add(new Vector2 (4, 5));
+		emitterLocations.Add(new Vector2 (6, 6));
+		pipeLocations.Add(new Vector3 (6, 8, (float)TILE_TYPE.LEFT_ARROW));
+		pipeLocations.Add(new Vector3 (5, 8, (float)TILE_TYPE.DOWN_ARROW));
+		pipeLocations.Add(new Vector3 (5, 7, (float)TILE_TYPE.RIGHT_ARROW));
+		pipeLocations.Add(new Vector3 (6, 7, (float)TILE_TYPE.UP_ARROW));
+		pipeLocations.Add(new Vector3 (4, 8, (float)TILE_TYPE.LEFT_ARROW));
+		pipeLocations.Add(new Vector3 (2, 8, (float)TILE_TYPE.DOWN_ARROW));
+		pipeLocations.Add(new Vector3 (2, 6, (float)TILE_TYPE.RIGHT_ARROW));
+		pipeLocations.Add(new Vector3 (4, 6, (float)TILE_TYPE.UP_ARROW));
+		return new GameMap (p1Towers, p2Towers, p3Towers, p4Towers, emitterLocations, pipeLocations);
+	}
+
+	GameMap DefineMap4() {
 		List<Vector2> p1Towers = new List<Vector2>();
 		List<Vector2> p2Towers = new List<Vector2>();
 		List<Vector2> p3Towers = new List<Vector2>();
@@ -453,6 +534,26 @@ public class GameRunner : MonoBehaviour
 		}
 
 		if (gameState == GAME_STATES.START) {
+			if (keyOne.Update()) {
+				Debug.unityLogger.Log("==Map1");
+				mapNum = 1;
+				currentMap = map1;
+			}
+			if (keyTwo.Update()) {
+				Debug.unityLogger.Log("==Map2");
+				mapNum = 2;
+				currentMap = map2;
+			}
+			if (keyThree.Update()) {
+				Debug.unityLogger.Log("==Map3");
+				mapNum = 3;
+				currentMap = map3;
+			}
+			if (keyFour.Update()) {
+				Debug.unityLogger.Log("==Map4");
+				mapNum = 4;
+				currentMap = map4;
+			}
 			if (start.Update ()) {
 				StartGame ();
 			}
