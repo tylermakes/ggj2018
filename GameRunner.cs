@@ -368,10 +368,34 @@ public class GameRunner : MonoBehaviour
 		playerTowers = new List<Tile> ();
 	}
 
+	void destroyPlayer(PlayerController playerController, PlayerUI playerUI) {
+		playerController.DestroyInternals ();
+		playerController = null;
+		playerUI.DestroyInternals ();
+		playerUI = null;
+	}
+
 	void destroyPlayers() {
-//		p1controller.Dest
-//		p1UI.DestroyInternals ();
-//		p1UI = null;
+		if (playerAdded1) {
+			destroyPlayer (p1controller, p1UI);
+			playerAdded1 = false;
+		}
+		if (playerAdded2) {
+			destroyPlayer (p2controller, p2UI);
+			playerAdded2 = false;
+		}
+		if (playerAdded3) {
+			destroyPlayer (p3controller, p3UI);
+			playerAdded3 = false;
+		}
+		if (playerAdded4) {
+			destroyPlayer (p4controller, p4UI);
+			playerAdded4 = false;
+		}
+		if (keyboardPlayerAdded) {
+			keyboardPlayerController = null;
+			keyboardPlayerAdded = false;
+		}
 	}
 
 	void QuitGame() {

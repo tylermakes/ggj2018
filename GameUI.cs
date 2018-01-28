@@ -31,4 +31,9 @@ public class GameUI {
         }
         timerTextMesh.text = timeRemaining.ToString("N0");
     }
+
+	public void DestroyInternals() {
+		MonoBehaviour.Destroy(timerTextMesh);
+		MonoBehaviour.Destroy(timerText);
+	}
 }

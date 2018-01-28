@@ -18,6 +18,7 @@ public class PlayerController {
 	private Vector2 limit;
 	private int score = 0;
 	private AudioClip dropSound;
+	private bool isDestroyed = false;
 
 	public PlayerController(PlayerUI ui, Vector2 startLocation, Material mat, Vector2 m_limit, Color color, AudioClip m_dropSound) {
 		player_selector = new Pipe(new Vector3 (Utilities.tileSize, Utilities.tileSize, Utilities.thickness), TILE_TYPE.CLEAR, mat);
@@ -92,6 +93,9 @@ public class PlayerController {
 	}
 
 	public void update() {
+		if (isDestroyed) {
+			return;
+		}
 		playerUI.setScore (score);
 		upDelay.update();
 		downDelay.update();
@@ -99,5 +103,11 @@ public class PlayerController {
 		rightDelay.update();
 		dropDelay.update ();
 		player_selector.setLocation(Utilities.getLocationVector(location, Utilities.PLAYER_LAYER));
+	}
+
+	public void DestroyInternals() {
+		isDestroyed = true;
+		player_selector.DestroyInternals ();
+		player_selector = null;
 	}
 }

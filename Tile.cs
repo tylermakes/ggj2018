@@ -43,6 +43,7 @@ public class Tile
 
 	public void DestroyInternals() {
 		MonoBehaviour.Destroy(coreObject);
+		coreObject = null;
 	}
 }
 

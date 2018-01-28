@@ -11,6 +11,9 @@ public class PlayerUI {
 	private Material light_mat;
 	private GameObject scoreText;
 	private TextMesh scoreTextMesh;
+	private GameObject overlay1;
+	private GameObject overlay2;
+	private bool isDestroyed = false;
 
 	public PlayerUI(Vector2 m_location, int numDrops, Material m_light_mat, Material m_mat) {
 		nextTiles = new Pipe[numDrops];
@@ -32,19 +35,19 @@ public class PlayerUI {
 	}
 
 	private void CreateOverlay(Vector2 location, int numDrops, Material light_mat, Material mat) {
-		GameObject cube = GameObject.CreatePrimitive (PrimitiveType.Cube);
-		cube.AddComponent<Rigidbody> ();
-		cube.GetComponent<Rigidbody> ().constraints = RigidbodyConstraints.FreezeAll;
-		cube.GetComponent<Renderer> ().material = light_mat;
-		cube.transform.position = new Vector3 (location.x, location.y, 0);
-		cube.transform.localScale = new Vector3 (Utilities.tileSize, Utilities.tileSize, Utilities.thickness);
+		overlay1 = GameObject.CreatePrimitive (PrimitiveType.Cube);
+		overlay1.AddComponent<Rigidbody> ();
+		overlay1.GetComponent<Rigidbody> ().constraints = RigidbodyConstraints.FreezeAll;
+		overlay1.GetComponent<Renderer> ().material = light_mat;
+		overlay1.transform.position = new Vector3 (location.x, location.y, 0);
+		overlay1.transform.localScale = new Vector3 (Utilities.tileSize, Utilities.tileSize, Utilities.thickness);
 
-		GameObject cube2 = GameObject.CreatePrimitive (PrimitiveType.Cube);
-		cube2.AddComponent<Rigidbody> ();
-		cube2.GetComponent<Rigidbody> ().constraints = RigidbodyConstraints.FreezeAll;
-		cube2.GetComponent<Renderer> ().material = mat;
-		cube2.transform.position = new Vector3 (location.x, location.y + Utilities.tileSize*1.5f, 0);
-		cube2.transform.localScale = new Vector3 (Utilities.tileSize, Utilities.tileSize*2, Utilities.thickness);
+		overlay2 = GameObject.CreatePrimitive (PrimitiveType.Cube);
+		overlay2.AddComponent<Rigidbody> ();
+		overlay2.GetComponent<Rigidbody> ().constraints = RigidbodyConstraints.FreezeAll;
+		overlay2.GetComponent<Renderer> ().material = mat;
+		overlay2.transform.position = new Vector3 (location.x, location.y + Utilities.tileSize*1.5f, 0);
+		overlay2.transform.localScale = new Vector3 (Utilities.tileSize, Utilities.tileSize*2, Utilities.thickness);
 	}
 
 	private void CreateNextDrops(Vector2 location, int numDrops) {
@@ -58,12 +61,32 @@ public class PlayerUI {
 	}
 
 	public void UpdateNextDrops(TILE_TYPE[] m_nextTiles) {
+		if (isDestroyed) {
+			return;
+		}
 		for (int i = 0; i < nextTiles.Length; i++) {
 			nextTiles[i].setTileType(m_nextTiles[i]);
 		}
 	}
 
 	public void setScore(int score) {
+		if (isDestroyed) {
+			return;
+		}
 		scoreTextMesh.text = "Score: " + score;
+	}
+
+	public void DestroyInternals() {
+		isDestroyed = true;
+		for (var i = 0; i < nextTiles.Length; i++) {
+			if (nextTiles [i] != null) {
+				nextTiles [i].DestroyInternals ();
+			}
+			nextTiles [i] = null;
+		}
+		MonoBehaviour.Destroy(overlay1);
+		MonoBehaviour.Destroy(overlay2);
+		MonoBehaviour.Destroy(scoreTextMesh);
+		MonoBehaviour.Destroy(scoreText);
 	}
 }
