@@ -44,6 +44,14 @@ public class Utilities
 		return new Vector3 (location.x * (tileSize + buffer), location.y * (tileSize + buffer), thickness * -layer);
 	}
 
+    public static Vector3 getCenterLocationVector(Vector2 location, int layer) {
+        return new Vector3((location.x + 0.5f) * (tileSize + buffer), (location.y + 0.5f) * (tileSize + buffer), thickness * -layer);
+    }
+
+    public static bool pointIsInsideSphere(Vector3 point, Vector3 center, float radius) {
+        return Vector3.Distance(point, center) < radius;
+    }
+
 	public static TILE_TYPE getRandomDropTile() {
 		int rand = Random.Range (0, 12);
 		TILE_TYPE tileType = TILE_TYPE.CLEAR;

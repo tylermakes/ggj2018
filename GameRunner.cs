@@ -37,7 +37,8 @@ public class GameRunner : MonoBehaviour
 	public Material p2_receiver_mat;
 	public Vector2 p1_location = new Vector2 (0, 0);
 	public Vector2 p2_location = new Vector2 (0, 0);
-	private PlayerController p1controller;
+    private Vector2 limit;
+    private PlayerController p1controller;
 	private PlayerController p2controller;
 	private PlayerUI p1UI;
 	private PlayerUI p2UI;
@@ -58,9 +59,9 @@ public class GameRunner : MonoBehaviour
 		Utilities.arrow_mat = arrow_mat;
 		Utilities.angle_arrow_mat = angle_arrow_mat;
 		Utilities.opp_angle_arrow_mat = opp_angle_arrow_mat;
+        limit = new Vector2(rows, columns);
 		MakeCustomWalls ();
         // AddEmitter (Utilities.getLocationVector(0, 3, WALL_LAYER));
-		Vector2 limit = new Vector2 (rows, columns);
 		p1UI = new PlayerUI (new Vector2 (-Utilities.tileSize * 2, 0), Utilities.NEXT_TILES, p1_light_mat, p1_selector_mat); 
 		p2UI = new PlayerUI (new Vector2 (Utilities.tileSize * (columns + 1), Utilities.tileSize * (rows - 3)), Utilities.NEXT_TILES, p2_light_mat, p2_selector_mat); 
 		p1controller = new PlayerController (p1UI, p1_location, p1_selector_mat, limit);
@@ -158,7 +159,7 @@ public class GameRunner : MonoBehaviour
 	}
 
     void AddEmitter(int x, int y) {
-		FluidEmitter fe = new FluidEmitter (Utilities.getLocationVector (x, y, PIPE_LAYER), TILE_TYPE.EMITTER, emitter_mat);
+		FluidEmitter fe = new FluidEmitter (Utilities.getLocationVector (x, y, PIPE_LAYER), TILE_TYPE.EMITTER, emitter_mat, limit);
 		towers [x] [y] = fe;
 		emitters.Add(fe);
     }
