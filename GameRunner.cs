@@ -116,7 +116,14 @@ public class GameRunner : MonoBehaviour
 		p4Towers.Add (new Vector2 (1, columns - 2));
 		emitterLocations.Add(new Vector2 (4, 5));
 		emitterLocations.Add(new Vector2 (6, 6));
-//		pipeLocations.Add(new Vector3 (1, 2, (float)TILE_TYPE.UP_ARROW));
+		pipeLocations.Add(new Vector3 (6, 8, (float)TILE_TYPE.LEFT_ARROW));
+		pipeLocations.Add(new Vector3 (5, 8, (float)TILE_TYPE.DOWN_ARROW));
+		pipeLocations.Add(new Vector3 (5, 7, (float)TILE_TYPE.RIGHT_ARROW));
+		pipeLocations.Add(new Vector3 (6, 7, (float)TILE_TYPE.UP_ARROW));
+		pipeLocations.Add(new Vector3 (4, 8, (float)TILE_TYPE.LEFT_ARROW));
+		pipeLocations.Add(new Vector3 (2, 8, (float)TILE_TYPE.DOWN_ARROW));
+		pipeLocations.Add(new Vector3 (2, 6, (float)TILE_TYPE.RIGHT_ARROW));
+		pipeLocations.Add(new Vector3 (4, 6, (float)TILE_TYPE.UP_ARROW));
 		for (var i = 0; i < rows; i++)
 		{
 			pipes [i] = new Pipe[(int)columns];
@@ -190,6 +197,7 @@ public class GameRunner : MonoBehaviour
 
 	void AddPlayerTower(int x, int y, TILE_TYPE tileType, Material mat) {
 		Tile tower = new Receiver (Utilities.getLocationVector (x, y, Utilities.PIPE_LAYER), tileType, mat);
+		tower.Rotate ();
 		towers [x] [y] = tower;
 		allTowers.Add (tower);
 	}

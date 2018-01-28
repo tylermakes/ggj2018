@@ -36,5 +36,9 @@ public class Tile
 	public void setColor(Color color) {
 		coreObject.GetComponent<Renderer> ().material.color = color;
 	}
+
+	public void Rotate() {
+		coreObject.transform.rotation = Quaternion.Euler (0, 0, 180);
+	}
 }
 

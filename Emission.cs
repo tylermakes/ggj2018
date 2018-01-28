@@ -7,9 +7,11 @@ public class Emission
 	GameObject coreObject;
 	private float emissionMoveSpeed = 25.0f;
 	public bool shouldDestroy = false;
-    private float radiusDetectionSize = Utilities.tileSize / 10;
-    private DIRECTION currentDirection = DIRECTION.UP;
-    private Vector2 limit;
+    private float radiusDetectionSize = 1f;
+	private DIRECTION currentDirection = DIRECTION.UP;//(DIRECTION)Random.Range(0, System.Enum.GetValues(typeof(DIRECTION)).Length);
+	private Vector2 limit;
+	private GameObject dTxtGO;
+	private TextMesh dTxt;
 
     public enum DIRECTION {
         UP,
@@ -33,7 +35,18 @@ public class Emission
 		cube.transform.rotation = Quaternion.Euler (0, 0, 180);
 		cube.transform.localScale = new Vector3(Utilities.tileSize, Utilities.tileSize, Utilities.thickness);
 		coreObject = cube;
+//		CreateDebugText (start_position);
         this.limit = limit;
+	}
+
+	private void CreateDebugText(Vector3 start_position) {
+		dTxtGO = new GameObject();
+
+		dTxt = dTxtGO.AddComponent<TextMesh>();
+		dTxtGO.transform.position = start_position;
+		dTxtGO.transform.parent = coreObject.transform;
+		dTxt.fontSize = 72;
+		dTxt.text = "Score:";
 	}
 
 //	MoveEmission(Time.deltaTime);
@@ -51,6 +64,7 @@ public class Emission
 		var pos = coreObject.transform.position;
 
 		float moveDistance = Time.deltaTime * emissionMoveSpeed;
+//		Vector2 gridPos = Utilities.getGridLocation(pos + new Vector3(Utilities.tileSize/2, Utilities.tileSize/2));
 		Vector2 gridPos = Utilities.getGridLocation(pos);
 
         // Move forward
@@ -67,7 +81,7 @@ public class Emission
             case DIRECTION.DOWN:
                 coreObject.transform.position = new Vector3(Utilities.getLocationVector(gridPos, 0).x, pos.y - moveDistance, pos.z);
                 break;
-        }
+		}
 
         // Check if out of bounds
         if (gridPos.y > limit.y - 1 || gridPos.y < 0 || gridPos.x > limit.x - 1 || gridPos.x < 0) {
@@ -78,8 +92,10 @@ public class Emission
         TILE_TYPE currentTileType = Utilities.getGridType(gridPos, pipes);
 
         // Recenter and change direction if needed
-        Vector3 centerOfGrid = Utilities.getCenterLocationVector(gridPos, 0);
-        bool isInCenterOfGrid = Utilities.pointIsInsideSphere(coreObject.transform.position, centerOfGrid, radiusDetectionSize);
+        Vector3 centerOfGrid = Utilities.getLocationVector(gridPos, 0);
+		bool isInCenterOfGrid = Utilities.pointIsInsideSphere(coreObject.transform.position, centerOfGrid, radiusDetectionSize);
+//		dTxt.text = ":" + Mathf.Floor(coreObject.transform.position.x) + "," + Mathf.Floor(coreObject.transform.position.y) + ":" +  Mathf.Floor(centerOfGrid.x) + "," +  Mathf.Floor(centerOfGrid.y) + ":";
+//		dTxt.text = ":" + gridPos.x + "," + gridPos.y + ":" + isInCenterOfGrid;
         if (isInCenterOfGrid) {
             bool isMovingVertically = currentDirection == DIRECTION.UP || currentDirection == DIRECTION.DOWN;
             bool willMoveHorizontally =
@@ -99,40 +115,40 @@ public class Emission
             
             if (isMovingVertically && willMoveHorizontally) {
                 // Readjust y position
-                coreObject.transform.position = new Vector3(coreObject.transform.position.x, centerOfGrid.y, coreObject.transform.position.z);
+//                coreObject.transform.position = new Vector3(coreObject.transform.position.x, centerOfGrid.y, coreObject.transform.position.z);
             }
-            if (!isMovingVertically && willMoveVertically) {
+			if (!isMovingVertically && willMoveVertically) {
                 // Readjust x position
-                coreObject.transform.position = new Vector3(centerOfGrid.x, coreObject.transform.position.y, coreObject.transform.position.z);
+//                coreObject.transform.position = new Vector3(centerOfGrid.x, coreObject.transform.position.y, coreObject.transform.position.z);
             }
-        }
 
-        // Set Direction
-        switch (currentTileType)
-        {
-            case TILE_TYPE.LEFT_ARROW:
-            case TILE_TYPE.LEFT_ELBOW_LEFT:
-            case TILE_TYPE.RIGHT_ELBOW_LEFT:
-                currentDirection = DIRECTION.LEFT;
-                break;
-            case TILE_TYPE.RIGHT_ARROW:
-            case TILE_TYPE.LEFT_ELBOW_RIGHT:
-            case TILE_TYPE.RIGHT_ELBOW_RIGHT:
-                currentDirection = DIRECTION.RIGHT;
-                break;
-            case TILE_TYPE.UP_ARROW:
-            case TILE_TYPE.LEFT_ELBOW_UP:
-            case TILE_TYPE.RIGHT_ELBOW_UP:
-                currentDirection = DIRECTION.UP;
-                break;
-            case TILE_TYPE.DOWN_ARROW:
-            case TILE_TYPE.LEFT_ELBOW_DOWN:
-            case TILE_TYPE.RIGHT_ELBOW_DOWN:
-                currentDirection = DIRECTION.DOWN;
-                break;
-            default:
-                //shouldDestroy = true;
-                break;
+			// Set Direction
+			switch (currentTileType)
+			{
+			case TILE_TYPE.LEFT_ARROW:
+			case TILE_TYPE.LEFT_ELBOW_LEFT:
+			case TILE_TYPE.RIGHT_ELBOW_LEFT:
+				currentDirection = DIRECTION.LEFT;
+				break;
+			case TILE_TYPE.RIGHT_ARROW:
+			case TILE_TYPE.LEFT_ELBOW_RIGHT:
+			case TILE_TYPE.RIGHT_ELBOW_RIGHT:
+				currentDirection = DIRECTION.RIGHT;
+				break;
+			case TILE_TYPE.UP_ARROW:
+			case TILE_TYPE.LEFT_ELBOW_UP:
+			case TILE_TYPE.RIGHT_ELBOW_UP:
+				currentDirection = DIRECTION.UP;
+				break;
+			case TILE_TYPE.DOWN_ARROW:
+			case TILE_TYPE.LEFT_ELBOW_DOWN:
+			case TILE_TYPE.RIGHT_ELBOW_DOWN:
+				currentDirection = DIRECTION.DOWN;
+				break;
+			default:
+				//shouldDestroy = true;
+				break;
+			}
         }
 	}
 

@@ -59,12 +59,16 @@ public class Utilities
 	}
 
     public static Vector3 getCenterLocationVector(Vector2 location, int layer) {
-        return new Vector3((location.x + 0.5f) * (tileSize + buffer), (location.y + 0.5f) * (tileSize + buffer), thickness * -layer);
-    }
+        return new Vector3((location.x) * (tileSize + buffer), (location.y + 1.5f) * (tileSize + buffer), thickness * -layer);
+	}
 
-    public static bool pointIsInsideSphere(Vector3 point, Vector3 center, float radius) {
-        return Vector3.Distance(point, center) < radius;
-    }
+//	public static bool pointIsInsideSphere(Vector3 point, Vector3 center, float radius) {
+//		return Vector3.Distance(point, center) < radius;
+//	}
+
+	public static bool pointIsInsideSphere(Vector3 point, Vector3 center, float radius) {
+		return point.x >= center.x && point.x <= center.x + radius && point.y >= center.y && point.y <= center.y + radius;
+	}
 
 	public static TILE_TYPE getRandomDropTile() {
 		int rand = Random.Range (0, 4);

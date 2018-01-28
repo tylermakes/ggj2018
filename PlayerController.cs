@@ -28,6 +28,8 @@ public class PlayerController {
 		location = startLocation;
 		limit = m_limit;
 		player_selector.setLocation(Utilities.getLocationVector(startLocation, Utilities.PLAYER_LAYER));
+		playerUI.UpdateNextDrops (nextDropType);
+		player_selector.setTileType (nextDropType [0]);
 		player_selector.setColor (color);
 	}
 
