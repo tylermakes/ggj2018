@@ -14,8 +14,12 @@ public class Utilities
 	public static int NEXT_TILES = 3;
 	public static Material p1_selector_mat;
 	public static Material p2_selector_mat;
+	public static Material p3_selector_mat;
+	public static Material p4_selector_mat;
 	public static Material p1_light_mat;
 	public static Material p2_light_mat;
+	public static Material p3_light_mat;
+	public static Material p4_light_mat;
 
 	public Utilities ()
 	{

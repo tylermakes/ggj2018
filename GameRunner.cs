@@ -7,6 +7,8 @@ public enum TILE_TYPE {
 	EMITTER,
 	PLAYER_ONE_GOAL,
 	PLAYER_TWO_GOAL,
+	PLAYER_THREE_GOAL,
+	PLAYER_FOUR_GOAL,
 	RIGHT_ARROW,
 	LEFT_ARROW,
 	UP_ARROW,
@@ -27,21 +29,33 @@ public class GameRunner : MonoBehaviour
 	static private float columns = 10;
 	public Material p1_selector_mat;
 	public Material p2_selector_mat;
+	public Material p3_selector_mat;
+	public Material p4_selector_mat;
 	public Material p1_light_mat;
 	public Material p2_light_mat;
+	public Material p3_light_mat;
+	public Material p4_light_mat;
 	public Material arrow_mat;
 	public Material angle_arrow_mat;
 	public Material opp_angle_arrow_mat;
 	public Material emitter_mat;
 	public Material p1_receiver_mat;
 	public Material p2_receiver_mat;
-	public Vector2 p1_location = new Vector2 (0, 0);
+	public Material p3_receiver_mat;
+	public Material p4_receiver_mat;
+	public Vector2 p1_location = new Vector2 (0, 0);// set from game runner
 	public Vector2 p2_location = new Vector2 (0, 0);
+	public Vector2 p3_location = new Vector2 (0, 0);
+	public Vector2 p4_location = new Vector2 (0, 0);
     private Vector2 limit;
-    private PlayerController p1controller;
+	private PlayerController p1controller;
 	private PlayerController p2controller;
+	private PlayerController p3controller;
+	private PlayerController p4controller;
 	private PlayerUI p1UI;
 	private PlayerUI p2UI;
+	private PlayerUI p3UI;
+	private PlayerUI p4UI;
 	private int WALL_LAYER = 1;
 	private int PIPE_LAYER = 2;
 	private Pipe[][] pipes = new Pipe[(int)rows][];
@@ -56,6 +70,10 @@ public class GameRunner : MonoBehaviour
 		Utilities.p1_light_mat = p1_light_mat;
 		Utilities.p2_selector_mat = p2_selector_mat;
 		Utilities.p2_light_mat = p2_light_mat;
+		Utilities.p3_selector_mat = p3_selector_mat;
+		Utilities.p3_light_mat = p3_light_mat;
+		Utilities.p4_selector_mat = p4_selector_mat;
+		Utilities.p4_light_mat = p4_light_mat;
 		Utilities.arrow_mat = arrow_mat;
 		Utilities.angle_arrow_mat = angle_arrow_mat;
 		Utilities.opp_angle_arrow_mat = opp_angle_arrow_mat;
@@ -65,17 +83,23 @@ public class GameRunner : MonoBehaviour
 		p1UI = new PlayerUI (new Vector2 (-Utilities.tileSize * 2, 0), Utilities.NEXT_TILES, p1_light_mat, p1_selector_mat); 
 		p2UI = new PlayerUI (new Vector2 (Utilities.tileSize * (columns + 1), Utilities.tileSize * (rows - 3)), Utilities.NEXT_TILES, p2_light_mat, p2_selector_mat); 
 		p1controller = new PlayerController (p1UI, p1_location, p1_selector_mat, limit);
-        p2controller = new PlayerController (p2UI, p2_location, p2_selector_mat, limit);
+		p2controller = new PlayerController (p2UI, p2_location, p2_selector_mat, limit);
+		p3controller = new PlayerController (p3UI, p3_location, p3_selector_mat, limit);
+		p4controller = new PlayerController (p4UI, p4_location, p4_selector_mat, limit);
 	}
 
 
 	void MakeCustomWalls() {
 		List<Vector2> p1Towers = new List<Vector2>();
 		List<Vector2> p2Towers = new List<Vector2>();
+		List<Vector2> p3Towers = new List<Vector2>();
+		List<Vector2> p4Towers = new List<Vector2>();
 		List<Vector2> emitterLocations = new List<Vector2>();
 		List<Vector3> pipeLocations = new List<Vector3>();
 		p1Towers.Add (new Vector2 (1, 2));
 		p2Towers.Add (new Vector2 (rows - 1, columns - 1));
+		p3Towers.Add (new Vector2 (rows - 1, 2));
+		p4Towers.Add (new Vector2 (1, columns - 1));
 		emitterLocations.Add(new Vector2 (rows - 3, 2));
 //		pipeLocations.Add(new Vector3 (1, 2, (float)TILE_TYPE.UP_ARROW));
 		for (var i = 0; i < rows; i++)
@@ -97,6 +121,12 @@ public class GameRunner : MonoBehaviour
 		});
 		p2Towers.ForEach (t => {
 			AddPlayerTower ((int)t.x, (int)t.y, TILE_TYPE.PLAYER_TWO_GOAL, p2_receiver_mat);
+		});
+		p3Towers.ForEach (t => {
+			AddPlayerTower ((int)t.x, (int)t.y, TILE_TYPE.PLAYER_THREE_GOAL, p3_receiver_mat);
+		});
+		p4Towers.ForEach (t => {
+			AddPlayerTower ((int)t.x, (int)t.y, TILE_TYPE.PLAYER_FOUR_GOAL, p4_receiver_mat);
 		});
 		emitterLocations.ForEach (t => {
 			AddEmitter ((int)t.x, (int)t.y);
@@ -120,6 +150,8 @@ public class GameRunner : MonoBehaviour
 	void MakeWalls() {
 		Vector2 p1ReceiverLocation = new Vector2 (2, 2);
 		Vector2 p2ReceiverLocation = new Vector2 (rows - 3, columns - 3);
+		Vector2 p3ReceiverLocation = new Vector2 (rows - 3, columns - 3);
+		Vector2 p4ReceiverLocation = new Vector2 (rows - 3, columns - 3);
 		Vector2 emmiter1Location = new Vector2 (rows - 3, 2);
 		Vector2 emmiter2Location = new Vector2 (2, columns - 3);
         for (var i = 0; i < rows; i++)
@@ -137,6 +169,10 @@ public class GameRunner : MonoBehaviour
 					AddPlayerTower (x, y, TILE_TYPE.PLAYER_ONE_GOAL, p1_receiver_mat);
 				} else if (x == p2ReceiverLocation.x && y == p2ReceiverLocation.y) {
 					AddPlayerTower (x, y, TILE_TYPE.PLAYER_TWO_GOAL, p2_receiver_mat);
+				} else if (x == p3ReceiverLocation.x && y == p3ReceiverLocation.y) {
+					AddPlayerTower (x, y, TILE_TYPE.PLAYER_THREE_GOAL, p3_receiver_mat);
+				} else if (x == p4ReceiverLocation.x && y == p4ReceiverLocation.y) {
+					AddPlayerTower (x, y, TILE_TYPE.PLAYER_FOUR_GOAL, p4_receiver_mat);
 				} else if (x == emmiter1Location.x && y == emmiter1Location.y) {
 					AddEmitter (x, y);
 				} else if (x == emmiter2Location.x && y == emmiter2Location.y) {
@@ -233,13 +269,17 @@ public class GameRunner : MonoBehaviour
 				ChangeTile ((int)dropData.location.x, (int)dropData.location.y, dropData.tileType);
 			}
 		}
-		HandlePlayerInput (p1controller, KeyCode.Joystick1Button1, "aHorizontal", "aVertical");
-		HandlePlayerInput (p2controller, KeyCode.Joystick2Button1, "bHorizontal", "bVertical");
+		HandlePlayerInput (p1controller, KeyCode.Joystick1Button1, "Horizontal1", "Vertical1");
+		HandlePlayerInput (p2controller, KeyCode.Joystick2Button1, "Horizontal2", "Vertical2");
+		HandlePlayerInput (p3controller, KeyCode.Joystick3Button1, "Horizontal3", "Vertical3");
+		HandlePlayerInput (p4controller, KeyCode.Joystick4Button1, "Horizontal4", "Vertical4");
 
 //		Debug.unityLogger.Log("==",Input.GetAxis (axisHName));
 //		Debug.unityLogger.Log("y==",Input.GetAxis (axisVName));
 		p1controller.update ();
 		p2controller.update ();
+		p3controller.update ();
+		p4controller.update ();
 
 
 		foreach(FluidEmitter emitter in emitters) {
