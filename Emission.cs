@@ -64,8 +64,6 @@ public class Emission
         }
 
         if (gridPos.y >= limit.y - 1 || gridPos.y < 0 || gridPos.x >= limit.x - 1 || gridPos.x < 0) {
-            Debug.Log("gridPos.x: " + limit.x);
-            Debug.Log("gridPos.y: " + limit.y);
             shouldDestroy = true;
             return;
         }

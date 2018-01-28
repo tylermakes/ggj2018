@@ -8,9 +8,6 @@ public class Tile
 
 	public Tile (Vector3 location, TILE_TYPE m_tileType, Material mat) {
 		GameObject cube = GameObject.CreatePrimitive (PrimitiveType.Cube);
-		// cube.tag = "Wall";
-		//		cube.AddComponent<BoxCollider> ();
-		//      cube.GetComponent<BoxCollider> ().isTrigger = true;
 		cube.AddComponent<Rigidbody> ();
 		cube.GetComponent<Rigidbody> ().constraints = RigidbodyConstraints.FreezeAll;
 		if (mat != null) {

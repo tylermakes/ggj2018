@@ -183,6 +183,30 @@ public class GameRunner : MonoBehaviour
 		}
 	}
 
+	void HandlePlayerInput(PlayerController playerController, KeyCode joystickKeyCode, string hAxis, string vAxis) {
+		double distance = 0.4;
+		if (Input.GetAxis (vAxis) < -distance) {
+			playerController.triggerDown ();
+		}
+		if (Input.GetAxis (vAxis) > distance) {
+			playerController.triggerUp ();
+		}
+		if (Input.GetAxis (hAxis) < -distance) {
+			playerController.triggerLeft ();
+		}
+		if (Input.GetAxis (hAxis) > distance) {
+			playerController.triggerRight ();
+		}
+		if (Input.GetKey(joystickKeyCode)) {
+			DropData dropData = playerController.triggerDrop ();
+			if (dropData == null) {
+				// not dropping
+			} else {
+				ChangeTile ((int)dropData.location.x, (int)dropData.location.y, dropData.tileType);
+			}
+		}
+	}
+
     void Update ()
 	{
 		if (Input.GetKey(KeyCode.DownArrow)) {
@@ -209,29 +233,8 @@ public class GameRunner : MonoBehaviour
 				ChangeTile ((int)dropData.location.x, (int)dropData.location.y, dropData.tileType);
 			}
 		}
-		string axisHName = "aHorizontal";
-		string axisVName = "aVertical";
-		double distance = 0.4;
-		if (Input.GetAxis (axisVName) < -distance) {
-			p1controller.triggerDown ();
-		}
-		if (Input.GetAxis (axisVName) > distance) {
-			p1controller.triggerUp ();
-		}
-		if (Input.GetAxis (axisHName) < -distance) {
-			p1controller.triggerLeft ();
-		}
-		if (Input.GetAxis (axisHName) > distance) {
-			p1controller.triggerRight ();
-		}
-		if (Input.GetKey(KeyCode.Joystick1Button1)) {
-			DropData dropData2 = p1controller.triggerDrop ();
-			if (dropData2 == null) {
-				// not dropping
-			} else {
-				ChangeTile ((int)dropData2.location.x, (int)dropData2.location.y, dropData2.tileType);
-			}
-		}
+		HandlePlayerInput (p1controller, KeyCode.Joystick1Button1, "aHorizontal", "aVertical");
+		HandlePlayerInput (p2controller, KeyCode.Joystick2Button1, "bHorizontal", "bVertical");
 
 //		Debug.unityLogger.Log("==",Input.GetAxis (axisHName));
 //		Debug.unityLogger.Log("y==",Input.GetAxis (axisVName));
@@ -253,7 +256,6 @@ public class GameRunner : MonoBehaviour
 			Emission em = emissions [i];
 			em.Update (pipes);
 			if (em.shouldDestroy) {
-				Debug.unityLogger.Log("==DESTROY");
 				em.DestroyInternals ();
 				emissions.RemoveAt (i);
 			} else {
@@ -261,8 +263,8 @@ public class GameRunner : MonoBehaviour
 				Vector2 emissionGridLocation = em.getGridLocation ();
 				allTowers.ForEach (aT => {
 					Vector2 aTLocation = Utilities.getGridLocation (aT.getLocation ());
-					Debug.unityLogger.Log ("==AT:", aTLocation);
-					Debug.unityLogger.Log ("==ET:", emissionGridLocation);
+//					Debug.unityLogger.Log ("==AT:", aTLocation);
+//					Debug.unityLogger.Log ("==ET:", emissionGridLocation);
 					if (emissionGridLocation.x == aTLocation.x && emissionGridLocation.y == aTLocation.y) {
 						em.setWon ();
 					}

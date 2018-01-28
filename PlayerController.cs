@@ -71,18 +71,11 @@ public class PlayerController {
 	}
 
 	private TILE_TYPE takeNextDrop() {
-		Debug.unityLogger.Log("======>", nextDropType[0]);
-		Debug.unityLogger.Log("======", nextDropType[1]);
-		Debug.unityLogger.Log("======", nextDropType[2]);
 		TILE_TYPE next = nextDropType [0];
-//		Debug.unityLogger.Log("dropping", nextDropType[0]);
 		for (int i = 1; i < nextDropType.Length; i++) {
-//			Debug.unityLogger.Log("--" + (i - 1), nextDropType[i - 1]);
-//			Debug.unityLogger.Log("^^^" + i, nextDropType[i]);
 			nextDropType[i - 1]  = nextDropType[i];
 		}
 		nextDropType [nextDropType.Length - 1] = Utilities.getRandomDropTile ();
-//		Debug.unityLogger.Log("f--", nextDropType[nextDropType.Length - 1]);
 		return next;
 	}
 
