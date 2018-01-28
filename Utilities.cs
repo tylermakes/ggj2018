@@ -29,7 +29,7 @@ public class Utilities
 	public static Material text_packet2_mat;
 	public static Material text_packet3_mat;
 	public static Material board_mat;
-	public static bool isCreditMode = false;
+	public static bool isCreditMode = true;
 	public static AudioSource audioSource;
 	public static AudioClip collectedSound;
 

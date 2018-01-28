@@ -73,6 +73,9 @@ public class GameRunner : MonoBehaviour
 	private List<Emission> emissions = new List<Emission>();
 	public AudioClip[] dropSound;
 	public AudioClip collectedSound;
+	private HoldKey reset;
+
+	private const int HOLD_KEY_TIME = 80;
 
     // Use this for initialization
 	void Start () {
@@ -95,6 +98,7 @@ public class GameRunner : MonoBehaviour
 		Utilities.text_packet3_mat = text_packet3_mat;
 		Utilities.board_mat = board_mat;
         limit = new Vector2(rows, columns);
+		reset = new HoldKey (KeyCode.Q, HOLD_KEY_TIME);
 		MakeCustomWalls ();
         // AddEmitter (Utilities.getLocationVector(0, 3, WALL_LAYER));
 		p1UI = new PlayerUI (new Vector2 (-Utilities.tileSize * 2, 0), Utilities.NEXT_TILES, p1_light_mat, p1_ui_overlay_mat); 
@@ -277,6 +281,7 @@ public class GameRunner : MonoBehaviour
 			//			p1controller.triggerRight ();
 			p2controller.triggerRight ();
 		}
+
 		if (Input.GetKey(KeyCode.Space)) {
 			DropData dropData = p2controller.triggerDrop ();
 			if (dropData == null) {
@@ -289,6 +294,11 @@ public class GameRunner : MonoBehaviour
 		HandlePlayerInput (p2controller, KeyCode.Joystick2Button1, "Horizontal2", "Vertical2");
 		HandlePlayerInput (p3controller, KeyCode.Joystick3Button1, "Horizontal3", "Vertical3");
 		HandlePlayerInput (p4controller, KeyCode.Joystick4Button1, "Horizontal4", "Vertical4");
+
+		if (reset.Update()) {
+			Debug.unityLogger.Log("==QUITTING");
+		}
+
 
 //		Debug.unityLogger.Log("==",Input.GetAxis (axisHName));
 //		Debug.unityLogger.Log("y==",Input.GetAxis (axisVName));
