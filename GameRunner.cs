@@ -43,11 +43,9 @@ public class GameRunner : MonoBehaviour
 	private PlayerUI p2UI;
 	private int WALL_LAYER = 1;
 	private int PIPE_LAYER = 2;
-    static private float emitSeconds = 1.0f;
-    private float emitSecondsElapsed = 0.0f;
-
 	private Pipe[][] pipes = new Pipe[(int)rows][];
 	private Tile[][] towers = new Tile[(int)rows][];
+	private List<Tile> allTowers = new List<Tile>();
 	private List<FluidEmitter> emitters = new List<FluidEmitter>();
 	private List<Emission> emissions = new List<Emission>();
 
@@ -75,11 +73,10 @@ public class GameRunner : MonoBehaviour
 		List<Vector2> p2Towers = new List<Vector2>();
 		List<Vector2> emitterLocations = new List<Vector2>();
 		List<Vector3> pipeLocations = new List<Vector3>();
-		p1Towers.Add (new Vector2 (1, 1));
+		p1Towers.Add (new Vector2 (1, 2));
 		p2Towers.Add (new Vector2 (rows - 1, columns - 1));
 		emitterLocations.Add(new Vector2 (rows - 3, 2));
-		pipeLocations.Add(new Vector3 (rows - 1, 2, (float)TILE_TYPE.LEFT_ARROW));
-		pipeLocations.Add(new Vector3 (rows - 2, 2, (float)TILE_TYPE.RIGHT_ARROW));
+//		pipeLocations.Add(new Vector3 (1, 2, (float)TILE_TYPE.UP_ARROW));
 		for (var i = 0; i < rows; i++)
 		{
 			pipes [i] = new Pipe[(int)columns];
@@ -151,7 +148,9 @@ public class GameRunner : MonoBehaviour
 	}
 
 	void AddPlayerTower(int x, int y, TILE_TYPE tileType, Material mat) {
-		towers [x] [y] = new Receiver (Utilities.getLocationVector (x, y, PIPE_LAYER), tileType, mat);
+		Tile tower = new Receiver (Utilities.getLocationVector (x, y, PIPE_LAYER), tileType, mat);
+		towers [x] [y] = tower;
+		allTowers.Add (tower);
 	}
 
 	void AddPipe(int x, int y, int t) {
@@ -173,6 +172,15 @@ public class GameRunner : MonoBehaviour
         cube.transform.position = wallPosition;
         cube.transform.localScale = wallScale;
     }
+
+	void ChangeTile(int x, int y, TILE_TYPE tileType) {
+		Pipe p = pipes [x] [y];
+		if (p == null) {
+			AddPipe (x, y, (int)tileType);
+		} else {
+			p.setTileType (tileType);
+		}
+	}
 
     void Update ()
 	{
@@ -197,7 +205,7 @@ public class GameRunner : MonoBehaviour
 			if (dropData == null) {
 				// not dropping
 			} else {
-				pipes [(int)dropData.location.x] [(int)dropData.location.y].setTileType (dropData.tileType);
+				ChangeTile ((int)dropData.location.x, (int)dropData.location.y, dropData.tileType);
 			}
 		}
 		string axisHName = "aHorizontal";
@@ -220,7 +228,7 @@ public class GameRunner : MonoBehaviour
 			if (dropData2 == null) {
 				// not dropping
 			} else {
-				pipes [(int)dropData2.location.x] [(int)dropData2.location.y].setTileType (dropData2.tileType);
+				ChangeTile ((int)dropData2.location.x, (int)dropData2.location.y, dropData2.tileType);
 			}
 		}
 
@@ -239,8 +247,26 @@ public class GameRunner : MonoBehaviour
 			emitter.Update();
 		}
 
-		foreach (var emission in emissions) {
-			emission.Update (pipes);
+		int i = 0;
+		while (i < emissions.Count) {
+			Emission em = emissions [i];
+			em.Update (pipes);
+			if (em.shouldDestroy) {
+				Debug.unityLogger.Log("==DESTROY");
+				em.DestroyInternals ();
+				emissions.RemoveAt (i);
+			} else {
+				i++;
+				Vector2 emissionGridLocation = em.getGridLocation ();
+				allTowers.ForEach (aT => {
+					Vector2 aTLocation = Utilities.getGridLocation (aT.getLocation ());
+					Debug.unityLogger.Log ("==AT:", aTLocation);
+					Debug.unityLogger.Log ("==ET:", emissionGridLocation);
+					if (emissionGridLocation.x == aTLocation.x && emissionGridLocation.y == aTLocation.y) {
+						em.setWon ();
+					}
+				});
+			}
 		}
     }
 

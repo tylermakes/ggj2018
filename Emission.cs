@@ -6,6 +6,7 @@ public class Emission
 	private const int MOVE_DELAY = 5;
 	GameObject coreObject;
 	private float emissionMoveSpeed = 25.0f;
+	public bool shouldDestroy = false;
 
 	public Emission (Vector3 start_position)
 	{
@@ -25,6 +26,11 @@ public class Emission
 //		Emit();
 //	}
 	public void Update(Pipe[][] pipes) {
+		if (shouldDestroy) {
+			// do nothing
+			return;
+		}
+
 		var pos = coreObject.transform.position;
 
 		float moveDistance = Time.deltaTime * emissionMoveSpeed;
@@ -54,6 +60,19 @@ public class Emission
 			coreObject.transform.position = new Vector3(Utilities.getLocationVector(gridPos, 0).x, pos.y - moveDistance, pos.z);
 			break;
 		}
+	}
+
+	public void setWon() {
+		Debug.unityLogger.Log("==WON", Utilities.getGridLocation(coreObject.transform.position));
+		shouldDestroy = true;
+	}
+
+	public Vector3 getGridLocation() {
+		return Utilities.getGridLocation (coreObject.transform.position);
+	}
+
+	public void DestroyInternals() {
+		MonoBehaviour.Destroy(coreObject);
 	}
 }
 

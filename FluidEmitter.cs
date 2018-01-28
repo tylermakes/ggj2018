@@ -3,7 +3,7 @@ using System.Collections;
 
 public class FluidEmitter : Tile
 {
-	private const int EMISSION_DELAY = 5;
+	private const int EMISSION_DELAY = 50;
 
 	DelayedTrigger emissionDelay = new DelayedTrigger(EMISSION_DELAY);
 	public FluidEmitter (Vector3 location, TILE_TYPE m_tileType, Material mat) : base(location, m_tileType, mat) {

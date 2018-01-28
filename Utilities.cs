@@ -22,8 +22,8 @@ public class Utilities
 	}
 
     public static Vector2 getGridLocation(Vector3 position) {
-        float x = position.x / (tileSize + buffer);
-        float y = position.y / (tileSize + buffer);
+		float x = Mathf.Floor(position.x / (tileSize + buffer));
+		float y = Mathf.Floor(position.y / (tileSize + buffer));
         return new Vector2(x, y);
     }
 
