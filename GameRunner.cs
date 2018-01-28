@@ -23,6 +23,7 @@ public enum TILE_TYPE {
 	RIGHT_ELBOW_RIGHT
 }
 
+[RequireComponent(typeof(AudioSource))]
 public class GameRunner : MonoBehaviour
 {
     static private float rows = 10;
@@ -70,9 +71,13 @@ public class GameRunner : MonoBehaviour
 	private List<Tile> allTowers = new List<Tile>();
 	private List<FluidEmitter> emitters = new List<FluidEmitter>();
 	private List<Emission> emissions = new List<Emission>();
+	public AudioClip[] dropSound;
+	public AudioClip collectedSound;
 
     // Use this for initialization
 	void Start () {
+		Utilities.audioSource = GetComponent<AudioSource>();
+		Utilities.collectedSound = collectedSound;
 		Utilities.p1_selector_mat = p1_selector_mat;
 		Utilities.p1_light_mat = p1_light_mat;
 		Utilities.p2_selector_mat = p2_selector_mat;
@@ -96,10 +101,10 @@ public class GameRunner : MonoBehaviour
 		p2UI = new PlayerUI (new Vector2 (Utilities.tileSize * (columns + 1), Utilities.tileSize * (rows - 3)), Utilities.NEXT_TILES, p2_light_mat, p2_ui_overlay_mat); 
 		p3UI = new PlayerUI (new Vector2 (Utilities.tileSize * (columns + 1), 0), Utilities.NEXT_TILES, p3_light_mat, p3_ui_overlay_mat); 
 		p4UI = new PlayerUI (new Vector2 (-Utilities.tileSize * 2, Utilities.tileSize * (rows - 3)), Utilities.NEXT_TILES, p4_light_mat, p4_ui_overlay_mat); 
-		p1controller = new PlayerController (p1UI, p1_location, p1_selector_mat, limit, Color.red);
-		p2controller = new PlayerController (p2UI, p2_location, p2_selector_mat, limit, Color.blue);
-		p3controller = new PlayerController (p3UI, p3_location, p3_selector_mat, limit, Color.green);
-		p4controller = new PlayerController (p4UI, p4_location, p4_selector_mat, limit, Color.magenta);
+		p1controller = new PlayerController (p1UI, p1_location, p1_selector_mat, limit, Color.red, dropSound[0]);
+		p2controller = new PlayerController (p2UI, p2_location, p2_selector_mat, limit, Color.blue, dropSound[1]);
+		p3controller = new PlayerController (p3UI, p3_location, p3_selector_mat, limit, Color.green, dropSound[2]);
+		p4controller = new PlayerController (p4UI, p4_location, p4_selector_mat, limit, Color.magenta, dropSound[3]);
 	}
 
 

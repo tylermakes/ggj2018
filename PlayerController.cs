@@ -17,8 +17,9 @@ public class PlayerController {
 	private PlayerUI playerUI;
 	private Vector2 limit;
 	private int score = 0;
+	private AudioClip dropSound;
 
-	public PlayerController(PlayerUI ui, Vector2 startLocation, Material mat, Vector2 m_limit, Color color) {
+	public PlayerController(PlayerUI ui, Vector2 startLocation, Material mat, Vector2 m_limit, Color color, AudioClip m_dropSound) {
 		player_selector = new Pipe(new Vector3 (Utilities.tileSize, Utilities.tileSize, Utilities.thickness), TILE_TYPE.CLEAR, mat);
 
 		playerUI = ui;
@@ -27,6 +28,7 @@ public class PlayerController {
 		}
 		location = startLocation;
 		limit = m_limit;
+		dropSound = m_dropSound;
 		player_selector.setLocation(Utilities.getLocationVector(startLocation, Utilities.PLAYER_LAYER));
 		playerUI.UpdateNextDrops (nextDropType);
 		player_selector.setTileType (nextDropType [0]);
@@ -78,6 +80,7 @@ public class PlayerController {
 	public DropData triggerDrop() {
 		DropData dd = null;
 		if (dropDelay.trigger ()) {
+			Utilities.playSound(dropSound);
 			dd = new DropData (location, takeNextDrop());
 			playerUI.UpdateNextDrops (nextDropType);
 		}

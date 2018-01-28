@@ -8,7 +8,7 @@ public class Emission
 	private float emissionMoveSpeed = 25.0f;
 	public bool shouldDestroy = false;
     private float radiusDetectionSize = 1f;
-	private DIRECTION currentDirection = DIRECTION.UP;//(DIRECTION)Random.Range(0, System.Enum.GetValues(typeof(DIRECTION)).Length);
+	private DIRECTION currentDirection;
 	private Vector2 limit;
 	private GameObject dTxtGO;
 	private TextMesh dTxt;
@@ -20,8 +20,9 @@ public class Emission
         RIGHT
     }
 
-	public Emission (Vector3 start_position, Vector2 limit)
+	public Emission (Vector3 start_position, Vector2 limit, DIRECTION direction)
 	{
+		currentDirection = direction;
 		var cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
 		cube.gameObject.name = "Emission";
 		cube.AddComponent<Rigidbody>();
@@ -153,7 +154,8 @@ public class Emission
 	}
 
 	public void setWon() {
-		Debug.unityLogger.Log("==WON", Utilities.getGridLocation(coreObject.transform.position));
+		Utilities.playSound (Utilities.collectedSound);
+//		Debug.unityLogger.Log("==WON", Utilities.getGridLocation(coreObject.transform.position));
 		shouldDestroy = true;
 	}
 
