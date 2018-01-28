@@ -106,7 +106,7 @@ public class GameRunner : MonoBehaviour
 	private GameMap map4;
 	private int mapNum = 1;
 
-	private const int HOLD_KEY_TIME = 100;
+	private const int HOLD_KEY_TIME = 50;
 
     // Use this for initialization
 	void Start () {
@@ -711,6 +711,7 @@ public class GameRunner : MonoBehaviour
     void handleGameTime() {
         timeRemaining -= Time.deltaTime;
         gameUI.UpdateTime(timeRemaining);
+		Debug.unityLogger.Log ("==updating time?", gameState);
         if (timeRemaining <= 0)
         {
             handleGameOver();

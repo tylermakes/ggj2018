@@ -22,7 +22,7 @@ public class GameUI {
         timerText.transform.position = new Vector3(location.x - Utilities.tileSize, location.y + Utilities.tileSize * 3f, 0);
         timerTextMesh.fontSize = 72;
         timerTextMesh.text = "60";
-    }
+	}
 
     public void UpdateTime(float time) {
        
@@ -41,7 +41,7 @@ public class GameUI {
 
         overlayText = new GameObject();
 
-        overlayTextMesh = timerText.AddComponent<TextMesh>();
+		overlayTextMesh = overlayText.AddComponent<TextMesh>();
         overlayText.transform.position = new Vector3(Utilities.tileSize * Utilities.columns / 2, Utilities.tileSize * Utilities.rows / 2, Utilities.GAME_UI_LAYER);
         overlayTextMesh.fontSize = 72;
         overlayTextMesh.text = "60";
