@@ -20,8 +20,8 @@ public class GameUI {
 			timerText = new GameObject();
 
 			timerTextMesh = timerText.AddComponent<TextMesh>();
-			timerText.transform.position = new Vector3(timePos.x - Utilities.tileSize, timePos.y + Utilities.tileSize * 3f, Utilities.GAME_UI_TEXT_LAYER);
-			timerTextMesh.fontSize = 72;
+            timerText.transform.position = new Vector3(timePos.x - Utilities.tileSize, timePos.y + Utilities.tileSize * 3f, Utilities.PLAYER_LAYER);
+			timerTextMesh.fontSize = 150;
 			timerTextMesh.text = "==";
 		}
 	}
