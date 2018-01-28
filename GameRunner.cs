@@ -65,6 +65,7 @@ public class GameRunner : MonoBehaviour
 	public Vector2 p2_location = new Vector2 (0, 0);
 	public Vector2 p3_location = new Vector2 (0, 0);
 	public Vector2 p4_location = new Vector2 (0, 0);
+	public GameObject lighting;
     private Vector2 limit;
 	private PlayerController p1controller;
 	private PlayerController p2controller;
@@ -107,7 +108,7 @@ public class GameRunner : MonoBehaviour
 	private int mapNum = 1;
 
 	private const int HOLD_KEY_TIME = 50;
-	private const int TOTAL_GAME_TIME = 30;
+	private const int TOTAL_GAME_TIME = 60;
 
     // Use this for initialization
 	void Start () {
@@ -502,7 +503,18 @@ public class GameRunner : MonoBehaviour
 		}
 	}
 
+	void resetLighting() {
+		lighting.transform.rotation = Quaternion.Euler (0, 0, 0);
+	}
+
+	void updateLighting() {
+		int timeInterval = 200 / TOTAL_GAME_TIME;
+		float timeElapsed = TOTAL_GAME_TIME - timeRemaining;
+		lighting.transform.rotation = Quaternion.Euler (timeElapsed * timeInterval, 0, 0);
+	}
+
 	void StartGame() {
+		resetLighting ();
 		int numPlayers = 0;
 		if (playerAdded1) {
 			numPlayers++;
@@ -652,6 +664,7 @@ public class GameRunner : MonoBehaviour
 //		Debug.unityLogger.Log("==",Input.GetAxis (axisHName));
 //		Debug.unityLogger.Log("y==",Input.GetAxis (axisVName));
 		if (gameState == GAME_STATES.PLAYING) {
+			updateLighting ();
             handleGameTime ();
 			updateEmitters ();
 			updateEmissions ();
