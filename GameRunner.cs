@@ -127,7 +127,9 @@ public class GameRunner : MonoBehaviour
 		MakeBackground ();
 		currentMap = DefineMap1 ();
         // AddEmitter (Utilities.getLocationVector(0, 3, WALL_LAYER));
-        gameUI = new GameUI();
+        gameUI = new GameUI(() => {
+            gameState = GAME_STATES.END;
+        });
 	}
 
 	PlayerController AddPlayer(int playerNum) {
