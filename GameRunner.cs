@@ -66,6 +66,7 @@ public class GameRunner : MonoBehaviour
 	private PlayerUI p2UI;
 	private PlayerUI p3UI;
 	private PlayerUI p4UI;
+    private GameUI gameUI;
 	private Pipe[][] pipes = new Pipe[(int)rows][];
 	private Tile[][] towers = new Tile[(int)rows][];
 	private List<Tile> allTowers = new List<Tile>();
@@ -101,6 +102,7 @@ public class GameRunner : MonoBehaviour
 		reset = new HoldKey (KeyCode.Q, HOLD_KEY_TIME);
 		MakeCustomWalls ();
         // AddEmitter (Utilities.getLocationVector(0, 3, WALL_LAYER));
+        gameUI = new GameUI();
 		p1UI = new PlayerUI (new Vector2 (-Utilities.tileSize * 2, 0), Utilities.NEXT_TILES, p1_light_mat, p1_ui_overlay_mat); 
 		p2UI = new PlayerUI (new Vector2 (Utilities.tileSize * (columns + 1), Utilities.tileSize * (rows - 3)), Utilities.NEXT_TILES, p2_light_mat, p2_ui_overlay_mat); 
 		p3UI = new PlayerUI (new Vector2 (Utilities.tileSize * (columns + 1), 0), Utilities.NEXT_TILES, p3_light_mat, p3_ui_overlay_mat); 
@@ -334,6 +336,7 @@ public class GameRunner : MonoBehaviour
 			}
 		}
 
+        gameUI.Update ();
 		p1controller.update ();
 		p2controller.update ();
 		p3controller.update ();
