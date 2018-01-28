@@ -40,5 +40,9 @@ public class Tile
 	public void Rotate() {
 		coreObject.transform.rotation = Quaternion.Euler (0, 0, 180);
 	}
+
+	public void DestroyInternals() {
+		MonoBehaviour.Destroy(coreObject);
+	}
 }
 

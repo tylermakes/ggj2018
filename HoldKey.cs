@@ -8,10 +8,10 @@ public class HoldKey
 	int holdTime;
 	int held = 0;
 
-	public HoldKey (KeyCode m_keycode, int holdTime)
+	public HoldKey (KeyCode m_keycode, int m_holdTime)
 	{
 		keycode = m_keycode;
-		holdTime = 50;
+		holdTime = m_holdTime;
 	}
 
 	public bool Update() {

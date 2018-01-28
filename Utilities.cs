@@ -10,7 +10,7 @@ public class Utilities
 
 	public static float tileSize = 20f;
 	public static float levelSpace = 10f; // z pace
-	public static float buffer = 1f;
+	public static float buffer = 0f;
 	public static float thickness = 0.2f;
 	public static Material arrow_mat;
 	public static Material arrow_mat_white;
@@ -29,7 +29,7 @@ public class Utilities
 	public static Material text_packet2_mat;
 	public static Material text_packet3_mat;
 	public static Material board_mat;
-	public static bool isCreditMode = true;
+	public static bool isCreditMode = false;
 	public static AudioSource audioSource;
 	public static AudioClip collectedSound;
 
