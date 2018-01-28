@@ -63,7 +63,8 @@ public class Emission
                 break;
         }
 
-        if (gridPos.y >= limit.y - 1 || gridPos.y < 0 || gridPos.x >= limit.x - 1 || gridPos.x < 0) {
+        // Check if out of bounds
+        if (gridPos.y > limit.y - 1 || gridPos.y < 0 || gridPos.x > limit.x - 1 || gridPos.x < 0) {
             shouldDestroy = true;
             return;
         }
