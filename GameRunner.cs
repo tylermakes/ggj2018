@@ -106,8 +106,6 @@ public class GameRunner : MonoBehaviour
 
 	private const int HOLD_KEY_TIME = 100;
 
-	private int nextPlayer = 1;
-
     // Use this for initialization
 	void Start () {
 		Utilities.audioSource = GetComponent<AudioSource>();
@@ -410,11 +408,13 @@ public class GameRunner : MonoBehaviour
 			playerController.triggerRight ();
 		}
 		if (Input.GetKey(joystickKeyCode)) {
-			DropData dropData = playerController.triggerDrop ();
-			if (dropData == null) {
-				// not dropping
-			} else {
-				ChangeTile ((int)dropData.location.x, (int)dropData.location.y, dropData.tileType);
+			if (gameState == GAME_STATES.START) {
+				DropData dropData = playerController.triggerDrop ();
+				if (dropData == null) {
+					// not dropping
+				} else {
+					ChangeTile ((int)dropData.location.x, (int)dropData.location.y, dropData.tileType);
+				}
 			}
 		}
 	}
@@ -562,19 +562,36 @@ public class GameRunner : MonoBehaviour
 		if (pause.Update()) {
 			gameState = GAME_STATES.PAUSED;
 		}
-
+			
 		if (playerAdded1) {
 			HandlePlayerInput (p1controller, KeyCode.Joystick1Button1, "Horizontal1", "Vertical1");
+		} else {
+			if (Input.GetKey(KeyCode.Joystick1Button9)) {
+				AddPlayer (1);
+			}
 		}
 		if (playerAdded2) {
 			HandlePlayerInput (p2controller, KeyCode.Joystick2Button1, "Horizontal2", "Vertical2");
+		} else {
+			if (Input.GetKey(KeyCode.Joystick2Button9)) {
+				AddPlayer (2);
+			}
 		}
 		if (playerAdded3) {
 			HandlePlayerInput (p3controller, KeyCode.Joystick3Button1, "Horizontal3", "Vertical3");
+		} else {
+			if (Input.GetKey(KeyCode.Joystick3Button9)) {
+				AddPlayer (3);
+			}
 		}
 		if (playerAdded4) {
 			HandlePlayerInput (p4controller, KeyCode.Joystick4Button1, "Horizontal4", "Vertical4");
+		} else {
+			if (Input.GetKey(KeyCode.Joystick4Button9)) {
+				AddPlayer (4);
+			}
 		}
+		
 		if (keyboardPlayerAdded) {
 			HandleKeyboardInput ();
 		}
