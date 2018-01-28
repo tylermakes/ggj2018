@@ -4,31 +4,22 @@ using UnityEngine;
 
 public class PlayerController {
 
-	GameObject player_selector;
+	Pipe player_selector;
 	Vector2 location;
-	static int KEYBOARD_DELAY = 5;
-	static int DROP_DELAY = 10;
+	static int KEYBOARD_DELAY = 6;
+	static int DROP_DELAY = 12;
 	DelayedTrigger upDelay = new DelayedTrigger(KEYBOARD_DELAY);
 	DelayedTrigger downDelay = new DelayedTrigger(KEYBOARD_DELAY);
 	DelayedTrigger leftDelay = new DelayedTrigger(KEYBOARD_DELAY);
 	DelayedTrigger rightDelay = new DelayedTrigger(KEYBOARD_DELAY);
 	DelayedTrigger dropDelay = new DelayedTrigger(DROP_DELAY);
-	private int PLAYER_LAYER = 3;
 	private TILE_TYPE[] nextDropType = new TILE_TYPE[Utilities.NEXT_TILES];
 	private PlayerUI playerUI;
 	private Vector2 limit;
 	private int score = 0;
 
-	public PlayerController(PlayerUI ui, Vector2 startLocation, Material mat, Vector2 m_limit) {
-		GameObject cube = GameObject.CreatePrimitive (PrimitiveType.Cube);
-		// cube.tag = "Wall";
-		cube.AddComponent<BoxCollider> ();
-		//      cube.GetComponent<BoxCollider> ().isTrigger = true;
-		cube.AddComponent<Rigidbody> ();
-		cube.GetComponent<Rigidbody> ().constraints = RigidbodyConstraints.FreezeAll;
-		cube.transform.localScale = new Vector3 (Utilities.tileSize, Utilities.tileSize, Utilities.thickness);
-		cube.GetComponent<Renderer>().material = mat;
-		player_selector = cube;
+	public PlayerController(PlayerUI ui, Vector2 startLocation, Material mat, Vector2 m_limit, Color color) {
+		player_selector = new Pipe(new Vector3 (Utilities.tileSize, Utilities.tileSize, Utilities.thickness), TILE_TYPE.CLEAR, mat);
 
 		playerUI = ui;
 		for (int i = 0; i < nextDropType.Length; i++) {
@@ -36,34 +27,35 @@ public class PlayerController {
 		}
 		location = startLocation;
 		limit = m_limit;
-		player_selector.transform.position = Utilities.getLocationVector(startLocation, PLAYER_LAYER);
+		player_selector.setLocation(Utilities.getLocationVector(startLocation, Utilities.PLAYER_LAYER));
+		player_selector.setColor (color);
 	}
 
 	public void triggerDown() {
 		if (location.y > 0 && downDelay.trigger()) {
 			location = location - new Vector2 (0, 1);
-			dropDelay.reset ();
+//			dropDelay.reset ();
 		}
 	}
 
 	public void triggerUp() {
 		if (location.y < limit.y - 1 && upDelay.trigger()) {
 			location = location + new Vector2 (0, 1);
-			dropDelay.reset ();
+//			dropDelay.reset ();
 		}
 	}
 
 	public void triggerLeft() {
 		if (location.x > 0 && leftDelay.trigger()) {
 			location = location - new Vector2 (1, 0);
-			dropDelay.reset ();
+//			dropDelay.reset ();
 		}
 	}
 
 	public void triggerRight() {
 		if (location.x < limit.x - 1 && rightDelay.trigger()) {
 			location = location + new Vector2 (1, 0);
-			dropDelay.reset ();
+//			dropDelay.reset ();
 		}
 	}
 
@@ -77,6 +69,7 @@ public class PlayerController {
 			nextDropType[i - 1]  = nextDropType[i];
 		}
 		nextDropType [nextDropType.Length - 1] = Utilities.getRandomDropTile ();
+		player_selector.setTileType (nextDropType[0]);
 		return next;
 	}
 
@@ -100,6 +93,6 @@ public class PlayerController {
 		leftDelay.update();
 		rightDelay.update();
 		dropDelay.update ();
-		player_selector.transform.position = Utilities.getLocationVector(location, PLAYER_LAYER);
+		player_selector.setLocation(Utilities.getLocationVector(location, Utilities.PLAYER_LAYER));
 	}
 }

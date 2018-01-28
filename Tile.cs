@@ -5,6 +5,7 @@ public class Tile
 {
 	protected GameObject coreObject;
 	public TILE_TYPE tileType;
+	protected float offset = 1f;
 
 	public Tile (Vector3 location, TILE_TYPE m_tileType, Material mat) {
 		GameObject cube = GameObject.CreatePrimitive (PrimitiveType.Cube);
@@ -25,6 +26,15 @@ public class Tile
 
 	public Vector3 getLocation() {
 		return coreObject.transform.position;
+	}
+
+	// don't move any on the board! (this is used for the selector)
+	public void setLocation(Vector3 location) {
+		coreObject.transform.position = location + new Vector3(offset, offset, 0);
+	}
+
+	public void setColor(Color color) {
+		coreObject.GetComponent<Renderer> ().material.color = color;
 	}
 }
 

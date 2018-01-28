@@ -36,20 +36,8 @@ public class PlayerUI {
 
 		scoreTextMesh = scoreText.AddComponent<TextMesh>();
 		scoreText.transform.position = new Vector3 (location.x - Utilities.tileSize, location.y + Utilities.tileSize*3f, 0);
-		// do some settings here that are needed in the component
-		// set the text
 		scoreTextMesh.fontSize = 72;
 		scoreTextMesh.text = "Score:";
-//		GameObject txt = new GameObject ();
-//		txt.transform.SetParent(GameObject.Find( "UICanvas" ).transform);
-////		txt.transform.position = new Vector3 (location.x, location.y - Utilities.tileSize*4f, 0);
-//		scoreText = txt.AddComponent<Text> ();
-//		scoreText.font = Resources.GetBuiltinResource(typeof(Font), "Arial.ttf") as Font;
-//		scoreText.fontSize = 24;
-//		scoreText.transform.position = new Vector3 (location.x, location.y, 0);
-////		scoreText.text = "=============";
-//		scoreText.text = "THIS IS THE SCORE!" + location.x + "," + location.y;
-//		scoreText.text = "THIS IS THE SCORE!THIS IS THE SCORE!THIS IS THE SCORE!THIS IS THE SCORE!THIS IS THE SCORE!";
 	}
 
 	private void CreateOverlay(Vector2 location, int numDrops, Material light_mat, Material mat) {
@@ -70,11 +58,11 @@ public class PlayerUI {
 
 	private void CreateNextDrops(Vector2 location, int numDrops) {
 		for (int i = 0; i < numDrops; i++) {
-			Material thisMat = mat;
-			if (i == 0) {
-				thisMat = light_mat;
-			}
-			nextTiles[i] = new Pipe(location + new Vector2(0, i * Utilities.tileSize), Utilities.getRandomDropTile(), thisMat);
+//			Material thisMat = mat;
+//			if (i == 0) {
+//				thisMat = light_mat;
+//			}
+			nextTiles[i] = new Pipe(location + new Vector2(0, i * Utilities.tileSize), Utilities.getRandomDropTile(), Utilities.arrow_mat);
 		}
 	}
 

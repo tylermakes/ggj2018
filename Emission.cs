@@ -18,14 +18,19 @@ public class Emission
         RIGHT
     }
 
-    public Emission (Vector3 start_position, Vector2 limit)
+	public Emission (Vector3 start_position, Vector2 limit)
 	{
 		var cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
 		cube.gameObject.name = "Emission";
 		cube.AddComponent<Rigidbody>();
 		cube.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
-		cube.GetComponent<Renderer> ().material = Utilities.text_packet_mat;
+		if (Utilities.isCreditMode) {
+			cube.GetComponent<Renderer> ().material = Utilities.getRandomTextPacketMat();
+		} else {
+			cube.GetComponent<Renderer> ().material = Utilities.text_packet_mat;
+		}
 		cube.transform.position = start_position;
+		cube.transform.rotation = Quaternion.Euler (0, 0, 180);
 		cube.transform.localScale = new Vector3(Utilities.tileSize, Utilities.tileSize, Utilities.thickness);
 		coreObject = cube;
         this.limit = limit;

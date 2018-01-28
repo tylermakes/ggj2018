@@ -4,11 +4,16 @@ using UnityEngine;
 
 public class Utilities
 {
+	public static int WALL_LAYER = 1;
+	public static int PIPE_LAYER = 2;
+	public static int PLAYER_LAYER = 4;
+
 	public static float tileSize = 20f;
 	public static float levelSpace = 10f; // z pace
 	public static float buffer = 1f;
 	public static float thickness = 0.2f;
 	public static Material arrow_mat;
+	public static Material arrow_mat_white;
 	public static Material angle_arrow_mat;
 	public static Material opp_angle_arrow_mat;
 	public static int NEXT_TILES = 3;
@@ -21,7 +26,10 @@ public class Utilities
 	public static Material p3_light_mat;
 	public static Material p4_light_mat;
 	public static Material text_packet_mat;
+	public static Material text_packet2_mat;
+	public static Material text_packet3_mat;
 	public static Material board_mat;
+	public static bool isCreditMode = false;
 
 	public Utilities ()
 	{
@@ -87,6 +95,15 @@ public class Utilities
 			tileType = TILE_TYPE.RIGHT_ELBOW_RIGHT;
 		}
 		return tileType;
+	}
+
+	public static Material getRandomTextPacketMat() {
+		int rand = Random.Range (0, 2);
+		Material txtMat = text_packet2_mat;
+		if (rand == 0) {
+			txtMat = text_packet3_mat;
+		}
+		return txtMat;
 	}
 }
 

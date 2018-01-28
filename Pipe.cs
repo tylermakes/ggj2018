@@ -38,22 +38,22 @@ public class Pipe : Tile
 	}
 
 	private void setRightArrow() {
-		coreObject.GetComponent<Renderer>().material = Utilities.arrow_mat;
+//		coreObject.GetComponent<Renderer>().material = Utilities.arrow_mat;
 		coreObject.transform.rotation = Quaternion.Euler (0, 0, 180);
 	}
 
 	private void setLeftArrow() {
-		coreObject.GetComponent<Renderer>().material = Utilities.arrow_mat;
+//		coreObject.GetComponent<Renderer>().material = Utilities.arrow_mat;
 		coreObject.transform.rotation = Quaternion.Euler (0, 0, 0);
 	}
 
 	private void setUpArrow() {
-		coreObject.GetComponent<Renderer>().material = Utilities.arrow_mat;
+//		coreObject.GetComponent<Renderer>().material = Utilities.arrow_mat;
 		coreObject.transform.rotation = Quaternion.Euler (0, 0, 270);
 	}
 
 	private void setDownArrow() {
-		coreObject.GetComponent<Renderer>().material = Utilities.arrow_mat;
+//		coreObject.GetComponent<Renderer>().material = Utilities.arrow_mat;
 		coreObject.transform.rotation = Quaternion.Euler (0, 0, 90);
 	}
 
