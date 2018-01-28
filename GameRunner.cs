@@ -491,6 +491,24 @@ public class GameRunner : MonoBehaviour
 	}
 
 	void StartGame() {
+		int numPlayers = 0;
+		if (playerAdded1) {
+			numPlayers++;
+		}
+		if (playerAdded2) {
+			numPlayers++;
+		}
+		if (playerAdded3) {
+			numPlayers++;
+		}
+		if (playerAdded4) {
+			numPlayers++;
+		}
+		if (numPlayers < 1) {
+			return; // need two players to start
+		}
+
+
 		if (playerAdded1) {
 			currentMap.p1Towers.ForEach (t => {
 				AddPlayerTower ((int)t.x, (int)t.y, TILE_TYPE.PLAYER_ONE_GOAL, p1_receiver_mat);
